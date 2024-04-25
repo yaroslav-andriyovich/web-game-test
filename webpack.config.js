@@ -6,6 +6,11 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.js?$/i,
+                use: 'babel-loader',
+                exclude: /node_modules/
+            },
+            {
                 test: /\.ts?$/i,
                 use: 'ts-loader',
                 exclude: /node_modules/
@@ -29,7 +34,7 @@ module.exports = {
     },
     devServer: {
         static: {
-            directory: path.join(__dirname, "./static/")
+            directory: path.join(__dirname, "./public/")
         },
     },
     plugins: [

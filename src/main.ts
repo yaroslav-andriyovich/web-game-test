@@ -1,16 +1,12 @@
-import "phaser";
+import * as Phaser from 'phaser';
 import { BootScene, GameScene } from './game/scenes';
 
-const config = {
+const config : Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
-    width: 720,
-    height: 480,
+    width: 480,
+    height: 640,
     parent: 'game-container',
     backgroundColor: '#fff',
-    scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH
-    },
     scene: [
         BootScene,
         GameScene

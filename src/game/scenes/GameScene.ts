@@ -1,32 +1,56 @@
-import {Cell, CellConfig, Grid, GridConfig, Pieces} from "../core/grid";
+import {Grid, GridInputHandler} from "../core/grid";
 import {SceneNames} from "./SceneNames";
+import {GameController} from "../GameController";
+import { Textures, GridConfig } from "../configs";
 
 export class GameScene extends Phaser.Scene {
-    private grid!: Grid;
+    private text!: Phaser.GameObjects.Text;
     private gridConfig!: GridConfig;
+    private grid!: Grid;
+    private gridInputHandler!: GridInputHandler;
+    private gameController!: GameController;
     private button!: Phaser.GameObjects.Container;
     private buttonText!: Phaser.GameObjects.Text;
     private buttonBackground!: Phaser.GameObjects.Rectangle;
-    private isPieceX: boolean = true;
 
     constructor() {
         super({ key: SceneNames.Game });
     }
 
     public preload() {
-        this.load.image('x', './x.png');
-        this.load.image('o', './o.png');
+        this.load.image(Textures.pieces.x.key, Textures.pieces.x.url);
+        this.load.image(Textures.pieces.o.key, Textures.pieces.o.url);
     }
 
     public create() {
         this.createConfigs();
         this.createText();
         this.createGrid();
+
+        this.gameController = new GameController(this.grid, this.text);
+        this.gridInputHandler = new GridInputHandler(this.grid, this.gameController);
+
         this.createRestartButton();
     }
 
+    private createConfigs() {
+        const cellConfig = {
+            width: 100,
+            height: 100,
+            overImageAlpha: 0.1
+        };
+
+        this.gridConfig = {
+            rows: 5,
+            cols: 4,
+            borderWidth: 2,
+            borderColor: 0x3e3e3e,
+            cell: cellConfig
+        };
+    }
+
     private createText() {
-        const text = this.add.text(240, 50, 'Tic-Tac-Toe', {
+        this.text = this.add.text(this.screenWidthCenter, 50, 'Tic-Tac-Toe', {
             fontFamily: 'Fantasy',
             fontSize: '42px',
             color: '#fa7269'
@@ -34,55 +58,11 @@ export class GameScene extends Phaser.Scene {
     }
 
     private createGrid() {
-        const x = 240 - (this.gridConfig.cols * this.gridConfig.cell.width) / 2;
-        const y = 320 - (this.gridConfig.rows * this.gridConfig.cell.height) / 2;
+        const x = this.screenWidthCenter - (this.gridConfig.cols * this.gridConfig.cell.width) / 2;
+        const y = this.screenHeightCenter - (this.gridConfig.rows * this.gridConfig.cell.height) / 2;
         const position = new Phaser.Math.Vector2(x, y);
 
         this.grid = new Grid(this, this.gridConfig, position);
-        const cells = this.grid.getCells();
-
-        for (let i= 0; i < this.gridConfig.rows; i++) {
-            for (let j= 0; j < this.gridConfig.cols; j++) {
-                const cell = cells[i][j];
-
-                cell.on(Phaser.Input.Events.POINTER_UP, () => this.onCellClick(cell));
-                cell.on(Phaser.Input.Events.POINTER_OVER, () => this.onCellPointerOver(cell));
-                cell.on(Phaser.Input.Events.POINTER_OUT, () => this.onCellPointerOut(cell));
-            }
-        }
-    }
-
-    private createConfigs() {
-        const cellConfig: CellConfig = {
-            width: 100,
-            height: 100,
-            overImageAlpha: 0.1
-        };
-
-        this.gridConfig = {
-            rows: 3,
-            cols: 3,
-            borderColor: 0x3e3e3e,
-            borderWidth: 2,
-            cell: cellConfig
-        };
-    }
-
-    private onCellClick(cell: Cell) {
-        const piece: Pieces = this.isPieceX ? Pieces.X : Pieces.O;
-        const pieceTextureKey: string = this.isPieceX ? 'x' : 'o';
-
-        cell.setPiece(piece, pieceTextureKey);
-
-        this.isPieceX = !this.isPieceX;
-    }
-
-    private onCellPointerOver(cell: Cell) {
-        cell.onPointerOver(this.isPieceX ? 'x' : 'o');
-    }
-
-    private onCellPointerOut(cell: Cell) {
-        cell.onPointerOut();
     }
 
     private createRestartButton() {
@@ -92,28 +72,20 @@ export class GameScene extends Phaser.Scene {
         this.buttonText = this.add.text(0, 0, 'Restart', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' });
         this.buttonText.setOrigin(0.5);
 
-        this.button = this.add.container(240, 550);
+        this.button = this.add.container(this.screenWidthCenter, 590);
         this.button.add([this.buttonBackground, this.buttonText]);
 
-        this.buttonBackground.on('pointerdown', () => this.onButtonDown());
-        this.buttonBackground.on('pointerup', () => this.onButtonUp());
-        this.buttonBackground.on('pointerover', () => this.onButtonOver());
-        this.buttonBackground.on('pointerout', () => this.onButtonOut());
+        this.buttonBackground.on('pointerdown', () => { this.buttonBackground.fillColor = 0x005497; });
+        this.buttonBackground.on('pointerup', () => { this.scene.restart(); });
+        this.buttonBackground.on('pointerover', () => { this.buttonBackground.fillColor = 0x1276b9; });
+        this.buttonBackground.on('pointerout', () => { this.buttonBackground.fillColor = 0x3498db; });
     }
 
-    private onButtonDown() {
-        this.buttonBackground.fillColor = 0x005497;
+    private get screenWidthCenter(): number {
+        return this.game.scale.width / 2;
     }
 
-    private onButtonUp() {
-        this.scene.restart();
-    }
-
-    private onButtonOver() {
-        this.buttonBackground.fillColor = 0x1276b9;
-    }
-
-    private onButtonOut() {
-        this.buttonBackground.fillColor = 0x3498db;
+    private get screenHeightCenter(): number {
+        return this.game.scale.height / 2;
     }
 }

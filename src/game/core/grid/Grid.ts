@@ -1,12 +1,12 @@
-import {Cell} from "./Cell";
-import { GridConfig } from "./GridConfig";
-import {CellConfig} from "./CellConfig";
+import {Cell, CellCord} from "./cell";
+import {GridConfig, CellConfig} from "../../configs";
 
 export class Grid extends Phaser.GameObjects.Container {
-    private readonly rows: number;
-    private readonly cols: number;
-    private readonly borderColor: number;
+    public readonly rows: number;
+    public readonly cols: number;
+
     private readonly borderWidth: number;
+    private readonly borderColor: number;
     private readonly cellConfig: CellConfig;
 
     private cells!: Cell[][];
@@ -17,8 +17,8 @@ export class Grid extends Phaser.GameObjects.Container {
 
         this.rows = config.rows;
         this.cols = config.cols;
-        this.borderColor = config.borderColor;
         this.borderWidth = config.borderWidth;
+        this.borderColor = config.borderColor;
         this.cellConfig = config.cell;
 
         this.createCells();
@@ -27,8 +27,19 @@ export class Grid extends Phaser.GameObjects.Container {
         this.scene.add.existing(this);
     }
 
-    public getCells() : Cell[][] {
-        return this.cells;
+    public getCellAt(cellCord: CellCord) {
+        return this.cells[cellCord.rowPos][cellCord.colPos];
+    }
+
+    public displayWinCells(winCells: Cell[]) {
+        for (let i= 0; i < this.rows; i++) {
+            for (let j= 0; j < this.cols; j++) {
+                let cell = this.cells[i][j];
+
+                if (!winCells.some(winCell => winCell === cell))
+                    cell.markLose();
+            }
+        }
     }
 
     private createCells() {
@@ -44,8 +55,8 @@ export class Grid extends Phaser.GameObjects.Container {
                 const x = offsetFromCenterX + j * this.cellConfig.width;
                 const y = offsetFromCenterY + i * this.cellConfig.height;
                 const cellPos = new Phaser.Math.Vector2(x, y);
-
-                const cell= new Cell(this.scene, cellPos, this.cellConfig);
+                const cellCord = new CellCord(i, j);
+                const cell= new Cell(this.scene, cellPos, cellCord, this.cellConfig);
 
                 this.cells[i][j] = cell;
                 this.add(cell);
@@ -55,6 +66,8 @@ export class Grid extends Phaser.GameObjects.Container {
 
     private createBorder() {
         this.border = new Phaser.GameObjects.Graphics(this.scene);
+        this.border.lineStyle(this.borderWidth, this.borderColor);
+
         this.drawRowsBorder();
         this.drawColsBorder();
         this.add(this.border);
@@ -67,7 +80,6 @@ export class Grid extends Phaser.GameObjects.Container {
         for (let i= 1; i < this.rows; i++) {
             const y= i * cellWidth;
 
-            this.border.lineStyle(this.borderWidth, this.borderColor);
             this.border.beginPath();
             this.border.moveTo(0, y);
             this.border.lineTo(totalWidth, y);
@@ -83,7 +95,6 @@ export class Grid extends Phaser.GameObjects.Container {
         for (let i= 1; i < this.cols; i++) {
             const x= i * cellHeight;
 
-            this.border.lineStyle(this.borderWidth, this.borderColor);
             this.border.beginPath();
             this.border.moveTo(x, 0);
             this.border.lineTo(x, totalHeight);

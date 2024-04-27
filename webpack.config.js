@@ -1,8 +1,14 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/main.ts',
+    entry: {
+        app: './src/main.ts'
+    },
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: '[name].bundle.js'
+    },
     module: {
         rules: [
             {
@@ -22,15 +28,11 @@ module.exports = {
                         loader: "file-loader",
                     },
                 ],
-            },
+            }
         ]
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
-    },
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js'
+        extensions: ['.tsx', '.ts', '.js']
     },
     devServer: {
         static: {
@@ -42,8 +44,8 @@ module.exports = {
             template: './html/template.html'
         }),
     ],
-    mode: 'production',
+    mode: 'development',
     performance: {
         hints: false,
-    },
+    }
 }

@@ -1,5 +1,5 @@
 import {Piece} from "./Piece";
-import {CellConfig} from "../../../configs";
+import {CellConfig} from "../../../Configs";
 import {CellCord} from "./CellCord";
 
 export class Cell extends Phaser.GameObjects.Container {

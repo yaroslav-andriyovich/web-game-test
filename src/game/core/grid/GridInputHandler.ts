@@ -2,7 +2,7 @@ import {Grid} from "./Grid";
 import {GameController} from "../../GameController";
 import {CellCord} from "./cell";
 import {Cell, Piece} from "./cell";
-import { Textures } from "../../configs";
+import { Textures } from "../../Configs";
 
 export class GridInputHandler {
     private grid: Grid;

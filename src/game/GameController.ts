@@ -1,7 +1,7 @@
 import {Grid} from "./core/grid";
 import {CellCord, Piece} from "./core/grid/cell";
 import {GameOverChecker} from "./GameOverChecker";
-import {Textures} from "./configs";
+import {Textures} from "./Configs";
 
 export class GameController {
     private readonly grid: Grid;

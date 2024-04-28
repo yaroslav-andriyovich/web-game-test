@@ -1,5 +1,5 @@
 import {Cell, CellCord} from "./cell";
-import {GridConfig, CellConfig} from "../../configs";
+import {GridConfig, CellConfig} from "../../Configs";
 
 export class Grid extends Phaser.GameObjects.Container {
     public readonly rows: number;

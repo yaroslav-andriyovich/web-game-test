@@ -1,2 +1,2 @@
 export * from "./Grid";
-export {GridInputHandler} from "./GridInputHandler";
+export * from "./GridInputHandler";

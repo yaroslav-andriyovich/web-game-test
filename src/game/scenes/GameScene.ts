@@ -1,7 +1,7 @@
 import {Grid, GridInputHandler} from "../core/grid";
 import {SceneNames} from "./SceneNames";
 import {GameController} from "../GameController";
-import { Textures, GridConfig } from "../configs";
+import { Textures, GridConfig } from "../Configs";
 
 export class GameScene extends Phaser.Scene {
     private text!: Phaser.GameObjects.Text;
@@ -41,8 +41,8 @@ export class GameScene extends Phaser.Scene {
         };
 
         this.gridConfig = {
-            rows: 5,
-            cols: 4,
+            rows: 3,
+            cols: 3,
             borderWidth: 2,
             borderColor: 0x3e3e3e,
             cell: cellConfig

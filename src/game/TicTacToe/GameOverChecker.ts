@@ -1,5 +1,5 @@
-import {Grid} from "./core/grid";
-import {Piece, CellCord, Cell} from "./core/grid/cell";
+import {Grid} from "./grid";
+import {Piece, CellCord, Cell} from "./grid/cell";
 import {GameController} from "./GameController";
 
 export class GameOverChecker {

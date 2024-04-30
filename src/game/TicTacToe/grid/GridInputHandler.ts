@@ -1,8 +1,8 @@
 import {Grid} from "./Grid";
-import {GameController} from "../../GameController";
+import {GameController} from "../GameController";
 import {CellCord} from "./cell";
 import {Cell, Piece} from "./cell";
-import { Textures } from "../../Configs";
+import { Textures } from "../Configs";
 
 export class GridInputHandler {
     private grid: Grid;

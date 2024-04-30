@@ -1,5 +1,5 @@
-import {Grid} from "./core/grid";
-import {CellCord, Piece} from "./core/grid/cell";
+import {Grid} from "./grid";
+import {CellCord, Piece} from "./grid/cell";
 import {GameOverChecker} from "./GameOverChecker";
 import {Textures} from "./Configs";
 

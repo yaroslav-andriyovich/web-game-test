@@ -1,20 +1,19 @@
-import {Grid, GridInputHandler} from "../core/grid";
+import {Grid, GridInputHandler} from "../TicTacToe/grid";
 import {SceneNames} from "./SceneNames";
-import {GameController} from "../GameController";
-import { Textures, GridConfig } from "../Configs";
+import {GameController} from "../TicTacToe/GameController";
+import { Textures, GridConfig } from "../TicTacToe/Configs";
+import {TextButton} from "../../common";
 
-export class GameScene extends Phaser.Scene {
+export class TicTacToe extends Phaser.Scene {
     private text!: Phaser.GameObjects.Text;
     private gridConfig!: GridConfig;
     private grid!: Grid;
     private gridInputHandler!: GridInputHandler;
     private gameController!: GameController;
-    private button!: Phaser.GameObjects.Container;
-    private buttonText!: Phaser.GameObjects.Text;
-    private buttonBackground!: Phaser.GameObjects.Rectangle;
+    private restartButton!: TextButton;
 
     constructor() {
-        super({ key: SceneNames.Game });
+        super({ key: SceneNames.TicTacToe });
     }
 
     public preload() {
@@ -66,19 +65,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     private createRestartButton() {
-        this.buttonBackground = this.add.rectangle(0, 0, 200, 50, 0x3498db);
-        this.buttonBackground.setInteractive();
-
-        this.buttonText = this.add.text(0, 0, 'Restart', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' });
-        this.buttonText.setOrigin(0.5);
-
-        this.button = this.add.container(this.screenWidthCenter, 590);
-        this.button.add([this.buttonBackground, this.buttonText]);
-
-        this.buttonBackground.on('pointerdown', () => { this.buttonBackground.fillColor = 0x005497; });
-        this.buttonBackground.on('pointerup', () => { this.scene.restart(); });
-        this.buttonBackground.on('pointerover', () => { this.buttonBackground.fillColor = 0x1276b9; });
-        this.buttonBackground.on('pointerout', () => { this.buttonBackground.fillColor = 0x3498db; });
+        this.restartButton = new TextButton(this, this.screenWidthCenter, 590, "Restart", () => this.scene.restart());
     }
 
     private get screenWidthCenter(): number {

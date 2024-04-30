@@ -1,4 +1,5 @@
 export enum SceneNames {
-    Boot = 'Boot',
-    Game = 'Game'
+    Menu = 'Menu',
+    TicTacToe = 'TicTacToe',
+    Stack = 'Stack'
 }

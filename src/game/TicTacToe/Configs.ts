@@ -1,17 +1,3 @@
-import { BootScene, GameScene } from './scenes';
-
-export const GameConfig : Phaser.Types.Core.GameConfig = {
-    type: Phaser.AUTO,
-    width: 480,
-    height: 640,
-    parent: 'game-container',
-    backgroundColor: '#fff',
-    scene: [
-        BootScene,
-        GameScene
-    ]
-};
-
 export const Textures = {
     pieces: {
         x: { key: 'x', url: './images/x.png' },

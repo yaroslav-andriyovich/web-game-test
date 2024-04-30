@@ -1,3 +1,4 @@
-export * from "./GameScene";
-export * from "./BootScene";
+export * from "./TicTacToe";
+export * from "./MenuScene";
 export * from "./SceneNames";
+export * from "./Stack";

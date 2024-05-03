@@ -1,5 +1,6 @@
 import {Game} from "phaser";
-import {MenuScene, TicTacToe} from "./game/scenes";
+import AnchorPlugin from "phaser3-rex-plugins/plugins/anchor-plugin";
+import {MenuScene, TicTacToe, Stack} from "./game/scenes";
 
 const gameConfig : Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -9,8 +10,16 @@ const gameConfig : Phaser.Types.Core.GameConfig = {
     backgroundColor: '#fff',
     scene: [
         MenuScene,
-        TicTacToe
-    ]
+        TicTacToe,
+        Stack
+    ],
+    plugins: {
+        global: [{
+            key: 'rexAnchor',
+            plugin: AnchorPlugin,
+            start: true
+        }]
+    }
 };
 
 const game = new Game(gameConfig);

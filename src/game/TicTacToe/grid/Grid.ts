@@ -12,8 +12,8 @@ export class Grid extends Phaser.GameObjects.Container {
     private cells!: Cell[][];
     private border!: Phaser.GameObjects.Graphics;
 
-    constructor(scene: Phaser.Scene, config: GridConfig, position: Phaser.Math.Vector2) {
-        super(scene, position.x, position.y);
+    constructor(scene: Phaser.Scene, x: number, y: number, config: GridConfig) {
+        super(scene, x, y);
 
         this.rows = config.rows;
         this.cols = config.cols;

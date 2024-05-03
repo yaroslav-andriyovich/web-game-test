@@ -3,6 +3,7 @@ import {SceneNames} from "./SceneNames";
 import {GameController} from "../TicTacToe/GameController";
 import { Textures, GridConfig } from "../TicTacToe/Configs";
 import {TextButton} from "../../common";
+import AnchorPlugin from "phaser3-rex-plugins/plugins/anchor-plugin";
 
 export class TicTacToe extends Phaser.Scene {
     private text!: Phaser.GameObjects.Text;
@@ -11,6 +12,7 @@ export class TicTacToe extends Phaser.Scene {
     private gridInputHandler!: GridInputHandler;
     private gameController!: GameController;
     private restartButton!: TextButton;
+    private anchor!: AnchorPlugin;
 
     constructor() {
         super({ key: SceneNames.TicTacToe });
@@ -19,6 +21,7 @@ export class TicTacToe extends Phaser.Scene {
     public preload() {
         this.load.image(Textures.pieces.x.key, Textures.pieces.x.url);
         this.load.image(Textures.pieces.o.key, Textures.pieces.o.url);
+        this.anchor = this.plugins.get('rexAnchor') as AnchorPlugin;
     }
 
     public create() {
@@ -49,30 +52,36 @@ export class TicTacToe extends Phaser.Scene {
     }
 
     private createText() {
-        this.text = this.add.text(this.screenWidthCenter, 50, 'Tic-Tac-Toe', {
+        this.text = this.add.text(0, 0, 'Tic-Tac-Toe', {
             fontFamily: 'Fantasy',
             fontSize: '42px',
             color: '#fa7269'
         }).setOrigin(0.5);
+
+        this.anchor.add(this.text, {
+            centerX: `center`,
+            y: `10%`
+        });
     }
 
     private createGrid() {
-        const x = this.screenWidthCenter - (this.gridConfig.cols * this.gridConfig.cell.width) / 2;
-        const y = this.screenHeightCenter - (this.gridConfig.rows * this.gridConfig.cell.height) / 2;
-        const position = new Phaser.Math.Vector2(x, y);
+        const x = (this.gridConfig.cols * this.gridConfig.cell.width) / 2;
+        const y = (this.gridConfig.rows * this.gridConfig.cell.height) / 2;
 
-        this.grid = new Grid(this, this.gridConfig, position);
+        this.grid = new Grid(this, 0, 0, this.gridConfig);
+
+        this.anchor.add(this.grid, {
+            centerX: `center-${x}`,
+            centerY: `center-${y}`
+        });
     }
 
     private createRestartButton() {
-        this.restartButton = new TextButton(this, this.screenWidthCenter, 590, "Restart", () => this.scene.restart());
-    }
+        this.restartButton = new TextButton(this, 0, 0, "Restart", () => this.scene.restart());
 
-    private get screenWidthCenter(): number {
-        return this.game.scale.width / 2;
-    }
-
-    private get screenHeightCenter(): number {
-        return this.game.scale.height / 2;
+        this.anchor.add(this.restartButton, {
+            centerX: `center`,
+            y: `90%`
+        });
     }
 }

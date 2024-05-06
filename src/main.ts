@@ -4,8 +4,8 @@ import {MenuScene, TicTacToe, Stack} from "./game/scenes";
 
 const gameConfig : Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
-    width: 480,
-    height: 640,
+    width: 720,
+    height: 720,
     parent: 'game-container',
     backgroundColor: '#fff',
     scene: [

@@ -1,4 +1,4 @@
-import {CellConfig, Textures} from "./Configs";
+import {BoardConfig, CellConfig, Textures} from "./Configs";
 
 export class BoardCell extends Phaser.GameObjects.Container {
     private background!: Phaser.GameObjects.Image;
@@ -15,7 +15,7 @@ export class BoardCell extends Phaser.GameObjects.Container {
         const size = CellConfig.cellSize;
 
         this.background = this.scene.add.image(0, 0, Textures.bg.key);
-        this.background.setTintFill(0x354369, 0x354369, 0x28334f, 0x28334f);
+        this.background.setTintFill(BoardConfig.cellColor.tl, BoardConfig.cellColor.tr, BoardConfig.cellColor.bl, BoardConfig.cellColor.br);
         this.background.setDisplaySize(size, size);
         this.background.setOrigin(0);
 

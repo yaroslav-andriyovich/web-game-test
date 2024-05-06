@@ -1,4 +1,4 @@
-import {BoardConfig} from "./Configs";
+import {BoardConfig, Textures} from "./Configs";
 import {BoardCells} from "./BoardCells";
 
 export class Board extends Phaser.GameObjects.Container {
@@ -15,8 +15,8 @@ export class Board extends Phaser.GameObjects.Container {
         this.scene.add.existing(this);
     }
 
-    private createBackground() {
-        this.background = this.scene.add.rectangle(0, 0, 10, 10, 0x141024);
+    private createBackground(){
+        this.background = this.scene.add.rectangle(0, 0, 10, 10, BoardConfig.bgColor);
         this.background.setOrigin(0);
 
         this.add(this.background);
@@ -35,6 +35,6 @@ export class Board extends Phaser.GameObjects.Container {
         const width = this.cellsContainer.width + BoardConfig.cellsPadding * 2;
         const height = this.cellsContainer.height + BoardConfig.cellsPadding * 2;
 
-        this.background.setSize(width, height);
+        this.background.setDisplaySize(width, height);
     }
 }

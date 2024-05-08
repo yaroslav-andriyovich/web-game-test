@@ -1,8 +1,8 @@
 import {Grid} from "./Grid";
 import {GameController} from "../GameController";
-import {CellCord} from "./cell";
 import {Cell, Piece} from "./cell";
-import { Textures } from "../Configs";
+import {Textures} from "../Configs";
+import {CellCoords} from "../../../common/CellCoords";
 
 export class GridInputHandler {
     private grid: Grid;
@@ -18,7 +18,7 @@ export class GridInputHandler {
     private subscribeCells() {
         for (let i= 0; i < this.grid.rows; i++) {
             for (let j= 0; j < this.grid.cols; j++) {
-                const cell = this.grid.getCellAt(new CellCord(i, j));
+                const cell = this.grid.getCellAt(new CellCoords(i, j));
 
                 cell.on(Phaser.Input.Events.POINTER_UP, () => this.onCellPointerUp(cell));
                 cell.on(Phaser.Input.Events.POINTER_OVER, () => this.onCellPointerOver(cell));

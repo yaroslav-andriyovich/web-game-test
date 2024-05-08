@@ -1,7 +1,8 @@
 import {Grid} from "./grid";
-import {CellCord, Piece} from "./grid/cell";
+import {Piece} from "./grid/cell";
 import {GameOverChecker} from "./GameOverChecker";
 import {Textures} from "./Configs";
+import {CellCoords} from "../../common/CellCoords";
 
 export class GameController {
     private readonly grid: Grid;
@@ -22,14 +23,14 @@ export class GameController {
         return this.playerPiece;
     }
 
-    public notifyLocalClick(cellCord: CellCord) {
+    public notifyLocalClick(cellCord: CellCoords) {
         if (this.isGameOver)
             return;
 
         this.makeMove(cellCord, this.playerPiece);
     }
 
-    public makeMove(cellCord: CellCord, piece: Piece) {
+    public makeMove(cellCord: CellCoords, piece: Piece) {
         if (this.isGameOver)
             return;
 

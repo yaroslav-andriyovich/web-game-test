@@ -1,16 +1,16 @@
 import {Piece} from "./Piece";
 import {CellConfig} from "../../Configs";
-import {CellCord} from "./CellCord";
+import {CellCoords} from "../../../../common/CellCoords";
 
 export class Cell extends Phaser.GameObjects.Container {
-    public readonly cord: CellCord;
+    public readonly cord: CellCoords;
     private readonly defaultImageAlpha: number = 1;
     private readonly overImageAlpha: number;
 
     private piece: Piece = Piece.None;
     private image!: Phaser.GameObjects.Image;
 
-    constructor(scene: Phaser.Scene, position: Phaser.Math.Vector2, cord: CellCord, config: CellConfig) {
+    constructor(scene: Phaser.Scene, position: Phaser.Math.Vector2, cord: CellCoords, config: CellConfig) {
         super(scene, position.x, position.y);
 
         this.cord = cord;

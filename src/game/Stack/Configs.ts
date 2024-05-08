@@ -1,7 +1,7 @@
 const texturePath:string = "./Stack/cell/";
 
 export const Textures = {
-    bg: { key: "bg", url: texturePath + "aqua.png" },
+    bg: { key: "bg", url: texturePath + "bg.png" },
     aqua: { key: "aqua", url: texturePath + "aqua.png" },
     blue: { key: "blue", url: texturePath + "blue.png" },
     blueviolet: { key: "blueviolet", url: texturePath + "blueviolet.png" },
@@ -16,38 +16,37 @@ export const Textures = {
 export const BoardConfig = {
     bgColor: 0x141024,
     cellsCount: 8,
-    cellsPadding: 4,
-    cellColor: { tl: 0x354369, tr: 0x354369, bl: 0x28334f, br: 0x28334f }
+    cellsPadding: 4
 };
 
 export const CellConfig = {
-    cellSize: 25,
+    cellSize: 30,
     cellOffset: 2
 };
 
-export type ShapeModel = {
+export type FigureModel = {
     textureKey: string;
-    cells: number[][];
+    parts: number[][];
 };
 
-export const Shapes: ShapeModel[] = [
+export const Figures: FigureModel[] = [
     {
         textureKey: Textures.aqua.key,
-        cells: [
+        parts: [
             [ 0, 1, 0 ],
             [ 1, 1, 1 ]
         ]
     },
     {
         textureKey: Textures.aqua.key,
-        cells: [
-            [ 0, 1, 0 ],
-            [ 1, 1, 1 ]
+        parts: [
+            [ 1, 1, 1 ],
+            [ 0, 1, 0 ]
         ]
     },
     {
         textureKey: Textures.aqua.key,
-        cells: [
+        parts: [
             [ 1, 0 ],
             [ 1, 1 ],
             [ 1, 0 ]
@@ -55,18 +54,19 @@ export const Shapes: ShapeModel[] = [
     },
     {
         textureKey: Textures.aqua.key,
-        cells: [
-            [ 1, 1, 1 ],
-            [ 0, 1, 0 ]
+        parts: [
+            [ 0, 1 ],
+            [ 1, 1 ],
+            [ 0, 1 ]
         ]
     },
     {
         textureKey: Textures.blue.key,
-        cells: [ [ 1 ] ]
+        parts: [ [ 1 ] ]
     },
     {
         textureKey: Textures.blue.key,
-        cells: [
+        parts: [
             [ 1, 1, 1 ],
             [ 1, 1, 1 ],
             [ 1, 1, 1 ]
@@ -74,14 +74,14 @@ export const Shapes: ShapeModel[] = [
     },
     {
         textureKey: Textures.blueviolet.key,
-        cells: [
+        parts: [
             [ 0, 1, 1 ],
             [ 1, 1, 0 ]
         ]
     },
     {
         textureKey: Textures.blueviolet.key,
-        cells: [
+        parts: [
             [ 1, 0 ],
             [ 1, 1 ],
             [ 0, 1 ]
@@ -89,14 +89,14 @@ export const Shapes: ShapeModel[] = [
     },
     {
         textureKey: Textures.green.key,
-        cells: [
+        parts: [
             [ 1, 1 ],
             [ 1, 1 ]
         ]
     },
     {
         textureKey: Textures.green.key,
-        cells: [
+        parts: [
             [ 1 ],
             [ 1 ],
             [ 1 ],
@@ -105,14 +105,14 @@ export const Shapes: ShapeModel[] = [
     },
     {
         textureKey: Textures.orange.key,
-        cells: [
+        parts: [
             [ 1, 1, 1 ],
             [ 0, 0, 1 ]
         ]
     },
     {
         textureKey: Textures.orange.key,
-        cells: [
+        parts: [
             [ 0, 1 ],
             [ 0, 1 ],
             [ 1, 1 ]
@@ -120,7 +120,7 @@ export const Shapes: ShapeModel[] = [
     },
     {
         textureKey: Textures.orange.key,
-        cells: [
+        parts: [
             [ 1, 1 ],
             [ 1, 0 ],
             [ 1, 0 ]
@@ -128,39 +128,46 @@ export const Shapes: ShapeModel[] = [
     },
     {
         textureKey: Textures.pink.key,
-        cells: [ [ 1, 1 ] ]
+        parts: [ [ 1, 1 ] ]
     },
     {
         textureKey: Textures.pink.key,
-        cells: [
+        parts: [
             [ 1 ],
             [ 1 ]
         ]
     },
     {
         textureKey: Textures.pink.key,
-        cells: [
+        parts: [
             [ 1, 0 ],
             [ 1, 1 ]
         ]
     },
     {
         textureKey: Textures.pink.key,
-        cells: [
+        parts: [
             [ 0, 1 ],
             [ 1, 1 ]
         ]
     },
     {
         textureKey: Textures.pink.key,
-        cells: [
+        parts: [
             [ 1, 1 ],
             [ 0, 1 ]
         ]
     },
     {
+        textureKey: Textures.pink.key,
+        parts: [
+            [ 1, 1 ],
+            [ 1, 0 ]
+        ]
+    },
+    {
         textureKey: Textures.purple.key,
-        cells: [
+        parts: [
             [ 1 ],
             [ 1 ],
             [ 1 ],
@@ -169,11 +176,11 @@ export const Shapes: ShapeModel[] = [
     },
     {
         textureKey: Textures.purple.key,
-        cells: [ [ 1, 1, 1, 1 ] ]
+        parts: [ [ 1, 1, 1, 1 ] ]
     },
     {
         textureKey: Textures.red.key,
-        cells: [
+        parts: [
             [ 0, 1 ],
             [ 1, 1 ],
             [ 1, 0 ]
@@ -181,14 +188,14 @@ export const Shapes: ShapeModel[] = [
     },
     {
         textureKey: Textures.red.key,
-        cells: [
+        parts: [
             [ 1, 1, 0 ],
             [ 0, 1, 1 ]
         ]
     },
     {
         textureKey: Textures.red.key,
-        cells: [
+        parts: [
             [ 0, 1 ],
             [ 1, 1 ],
             [ 1, 0 ]
@@ -196,7 +203,7 @@ export const Shapes: ShapeModel[] = [
     },
     {
         textureKey: Textures.yellow.key,
-        cells: [
+        parts: [
             [ 1, 1 ],
             [ 0, 1 ],
             [ 0, 1 ]
@@ -204,7 +211,7 @@ export const Shapes: ShapeModel[] = [
     },
     {
         textureKey: Textures.yellow.key,
-        cells: [
+        parts: [
             [ 1, 0 ],
             [ 1, 0 ],
             [ 1, 1 ]
@@ -212,7 +219,7 @@ export const Shapes: ShapeModel[] = [
     },
     {
         textureKey: Textures.yellow.key,
-        cells: [
+        parts: [
             [ 1, 1, 1 ],
             [ 1, 0, 0 ]
         ]

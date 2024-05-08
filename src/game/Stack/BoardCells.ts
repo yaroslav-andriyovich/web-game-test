@@ -1,9 +1,8 @@
 import {BoardConfig, CellConfig} from "./Configs";
-
 import {BoardCell} from "./BoardCell";
 
 export class BoardCells extends Phaser.GameObjects.Container {
-    public grid!: BoardCell[][];
+    public cells!: BoardCell[][];
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y);
@@ -14,11 +13,15 @@ export class BoardCells extends Phaser.GameObjects.Container {
         this.scene.add.existing(this);
     }
 
+    public get all() {
+        return this.cells;
+    }
+
     private createCells() {
-        this.grid = [];
+        this.cells = [];
 
         for (let i = 0; i < BoardConfig.cellsCount; i++) {
-            this.grid[i] = [];
+            this.cells[i] = [];
 
             for (let j = 0; j < BoardConfig.cellsCount; j++) {
                 const size = CellConfig.cellSize;
@@ -28,7 +31,7 @@ export class BoardCells extends Phaser.GameObjects.Container {
 
                 const cell = new BoardCell(this.scene, x, y);
 
-                this.grid[i][j] = cell;
+                this.cells[i][j] = cell;
 
                 this.add(cell);
             }

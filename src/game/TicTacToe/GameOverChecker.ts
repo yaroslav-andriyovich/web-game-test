@@ -1,6 +1,7 @@
 import {Grid} from "./grid";
-import {Piece, CellCord, Cell} from "./grid/cell";
+import {Piece, Cell} from "./grid/cell";
 import {GameController} from "./GameController";
+import {CellCoords} from "../../common/CellCoords";
 
 export class GameOverChecker {
     private readonly grid: Grid;
@@ -20,7 +21,7 @@ export class GameOverChecker {
     public checkDraw() {
         for (let i = 0; i < this.grid.rows; i++) {
             for (let j = 0; j < this.grid.cols; j++) {
-                const cell = this.grid.getCellAt(new CellCord(i, j));
+                const cell = this.grid.getCellAt(new CellCoords(i, j));
 
                 if (cell.getPiece() == Piece.None)
                     return false;
@@ -36,7 +37,7 @@ export class GameOverChecker {
             let winCells: Cell[] = [];
 
             for (let j = 0; j < this.grid.cols; j++) {
-                const cell = this.grid.getCellAt(new CellCord(i, j));
+                const cell = this.grid.getCellAt(new CellCoords(i, j));
 
                 if (cell.getPiece() == this.gameController.currentPiece) {
                     winCells[count] = cell;
@@ -61,7 +62,7 @@ export class GameOverChecker {
             let winCells: Cell[] = [];
 
             for (let j = 0; j < this.grid.rows; j++) {
-                const cell = this.grid.getCellAt(new CellCord(j, i));
+                const cell = this.grid.getCellAt(new CellCoords(j, i));
 
                 if (cell.getPiece() == this.gameController.currentPiece) {
                     winCells[count] = cell;
@@ -103,7 +104,7 @@ export class GameOverChecker {
         let winCells: Cell[] = [];
 
         for (let i = 0; i < this.pieceCountToWin; i++) {
-            const cell = this.grid.getCellAt(new CellCord(row + i, col + i));
+            const cell = this.grid.getCellAt(new CellCoords(row + i, col + i));
 
             if (cell.getPiece() == this.gameController.currentPiece) {
                 winCells[count] = cell;
@@ -126,7 +127,7 @@ export class GameOverChecker {
         let winCells: Cell[] = [];
 
         for (let i = 0; i < this.pieceCountToWin; i++) {
-            const cell = this.grid.getCellAt(new CellCord(row + i, col - i));
+            const cell = this.grid.getCellAt(new CellCoords(row + i, col - i));
 
             if (cell.getPiece() == this.gameController.currentPiece) {
                 winCells[count] = cell;

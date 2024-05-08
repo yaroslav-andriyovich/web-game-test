@@ -1,5 +1,6 @@
-import {Cell, CellCord} from "./cell";
+import {Cell} from "./cell";
 import {GridConfig, CellConfig} from "../Configs";
+import {CellCoords} from "../../../common/CellCoords";
 
 export class Grid extends Phaser.GameObjects.Container {
     public readonly rows: number;
@@ -27,19 +28,17 @@ export class Grid extends Phaser.GameObjects.Container {
         this.scene.add.existing(this);
     }
 
-    public getCellAt(cellCord: CellCord) {
-        return this.cells[cellCord.rowPos][cellCord.colPos];
+    public getCellAt(cellCord: CellCoords) {
+        return this.cells[cellCord.row][cellCord.col];
     }
 
     public displayWinCells(winCells: Cell[]) {
-        for (let i= 0; i < this.rows; i++) {
-            for (let j= 0; j < this.cols; j++) {
-                let cell = this.cells[i][j];
-
+        this.cells.forEach((row) => {
+            row.forEach((cell) => {
                 if (!winCells.some(winCell => winCell === cell))
                     cell.markLose();
-            }
-        }
+            });
+        });
     }
 
     private createCells() {
@@ -55,7 +54,7 @@ export class Grid extends Phaser.GameObjects.Container {
                 const x = offsetFromCenterX + j * this.cellConfig.width;
                 const y = offsetFromCenterY + i * this.cellConfig.height;
                 const cellPos = new Phaser.Math.Vector2(x, y);
-                const cellCord = new CellCord(i, j);
+                const cellCord = new CellCoords(i, j);
                 const cell= new Cell(this.scene, cellPos, cellCord, this.cellConfig);
 
                 this.cells[i][j] = cell;

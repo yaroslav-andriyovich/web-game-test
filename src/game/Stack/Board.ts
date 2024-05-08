@@ -1,5 +1,7 @@
-import {BoardConfig, Textures} from "./Configs";
+import {BoardConfig} from "./Configs";
 import {BoardCells} from "./BoardCells";
+import {CellFillingData} from "./CellFillingData";
+import {CellCoords} from "../../common/CellCoords";
 
 export class Board extends Phaser.GameObjects.Container {
     private background!: Phaser.GameObjects.Rectangle;
@@ -13,6 +15,39 @@ export class Board extends Phaser.GameObjects.Container {
         this.resizeBackground();
 
         this.scene.add.existing(this);
+    }
+
+    public fillCells(fillingData: CellFillingData[]) {
+        fillingData.forEach((data) => {
+            const cell = this.cellsContainer.all[data.row][data.col];
+
+            cell.fill(data);
+        });
+    }
+
+    public highlightCells(fillingData: CellFillingData[]) {
+        fillingData.forEach((data) => {
+            const cell = this.cellsContainer.all[data.row][data.col];
+
+            cell.highlight(data);
+        });
+    }
+
+    public clearHighlightedCells() {
+        this.cellsContainer.all.forEach((row, i) => {
+            row.forEach((cell, j) => {
+                if (cell.isHighlighted)
+                    cell.clear();
+            });
+        });
+    }
+
+    public clearCells(cellCoords: CellCoords[]) {
+        cellCoords.forEach((coords) => {
+            const cell = this.cellsContainer.all[coords.row][coords.col];
+
+            cell.clear();
+        });
     }
 
     private createBackground(){
@@ -32,8 +67,9 @@ export class Board extends Phaser.GameObjects.Container {
     }
 
     private resizeBackground() {
-        const width = this.cellsContainer.width + BoardConfig.cellsPadding * 2;
-        const height = this.cellsContainer.height + BoardConfig.cellsPadding * 2;
+        const padding = BoardConfig.cellsPadding * 1.6;
+        const width = this.cellsContainer.width + padding;
+        const height = this.cellsContainer.height + padding;
 
         this.background.setDisplaySize(width, height);
     }

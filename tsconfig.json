@@ -5,10 +5,9 @@
         "target": "es5",
         "allowJs": true,
         "moduleResolution": "node",
-        "lib": ["es6", "dom", "dom.iterable", "scripthost"],
+        "lib": ["es6", "dom", "dom.iterable", "scripthost", "esnext"],
         "typeRoots": ["./node_modules/phaser/types"],
         "types": ["phaser"],
-        "skipLibCheck": true,
-        "strict": true
+        "skipLibCheck": true
     }
 }

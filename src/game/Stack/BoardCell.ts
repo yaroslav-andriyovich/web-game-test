@@ -28,18 +28,18 @@ export class BoardCell extends Phaser.GameObjects.Container {
         return this.highlighted;
     }
 
-    public fill(figurePart: CellFillingData) {
-        this.changeFillingTexture(figurePart);
+    public fill(imageKey: string) {
+        this.changeFillingTexture(imageKey);
         this.fillingImage.alpha = 1;
         this.filled = true;
     }
 
-    public highlight(figurePart: CellFillingData) {
+    public highlight(imageKey: string) {
         if (this.isFilled)
             return;
 
-        this.changeFillingTexture(figurePart);
-        this.fillingImage.alpha = 0.5;
+        this.changeFillingTexture(imageKey);
+        this.fillingImage.alpha = 0.4;
         this.highlighted = true;
     }
 
@@ -66,8 +66,8 @@ export class BoardCell extends Phaser.GameObjects.Container {
         this.add(this.fillingImage);
     }
 
-    private changeFillingTexture(figurePart: CellFillingData) {
-        this.fillingImage.setTexture(figurePart.imageKey);
+    private changeFillingTexture(imageKey: string) {
+        this.fillingImage.setTexture(imageKey);
         this.fillingImage.setDisplaySize(CellConfig.cellSize, CellConfig.cellSize);
         this.fillingImage.setVisible(true);
     }

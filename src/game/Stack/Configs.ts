@@ -20,7 +20,7 @@ export const BoardConfig = {
 };
 
 export const CellConfig = {
-    cellSize: 30,
+    cellSize: 35,
     cellOffset: 2
 };
 

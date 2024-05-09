@@ -17,11 +17,15 @@ export class Board extends Phaser.GameObjects.Container {
         this.scene.add.existing(this);
     }
 
+    public get cells() {
+        return this.cellsContainer.all;
+    }
+
     public fillCells(fillingData: CellFillingData[]) {
         fillingData.forEach((data) => {
             const cell = this.cellsContainer.all[data.row][data.col];
 
-            cell.fill(data);
+            cell.fill(data.imageKey);
         });
     }
 
@@ -29,14 +33,14 @@ export class Board extends Phaser.GameObjects.Container {
         fillingData.forEach((data) => {
             const cell = this.cellsContainer.all[data.row][data.col];
 
-            cell.highlight(data);
+            cell.highlight(data.imageKey);
         });
     }
 
     public clearHighlightedCells() {
         this.cellsContainer.all.forEach((row, i) => {
             row.forEach((cell, j) => {
-                if (cell.isHighlighted)
+                if (cell.isHighlighted && !cell.isFilled)
                     cell.clear();
             });
         });
@@ -67,7 +71,7 @@ export class Board extends Phaser.GameObjects.Container {
     }
 
     private resizeBackground() {
-        const padding = BoardConfig.cellsPadding * 1.6;
+        const padding = BoardConfig.cellsPadding * 2;
         const width = this.cellsContainer.width + padding;
         const height = this.cellsContainer.height + padding;
 

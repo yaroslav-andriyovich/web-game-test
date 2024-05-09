@@ -3,7 +3,6 @@ import {CellConfig, FigureModel} from "./Configs";
 export class Figure extends Phaser.GameObjects.Container {
     public readonly model: FigureModel;
     private imageParts!: Phaser.GameObjects.Image[][];
-    private imagePartsFlat!: Phaser.GameObjects.Image[];
 
     constructor(scene: Phaser.Scene, x: number, y: number, model: FigureModel) {
         super(scene, x, y);
@@ -18,10 +17,6 @@ export class Figure extends Phaser.GameObjects.Container {
 
     public get parts() {
         return this.imageParts;
-    }
-
-    public get partsAsFlat() {
-        return this.imagePartsFlat;
     }
 
     private createParts() {
@@ -49,7 +44,5 @@ export class Figure extends Phaser.GameObjects.Container {
                 this.add(cell);
             }
         }
-
-        this.imagePartsFlat = this.imageParts.flat();
     }
 }

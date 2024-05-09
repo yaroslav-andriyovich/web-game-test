@@ -42,15 +42,17 @@ export class Stack extends Phaser.Scene {
     }
 
     private tryHighlightCellsUnderFigure() {
-        const cellOffset = CellConfig.cellSize * 0.5 + CellConfig.cellOffset;
+        const cellOffset = CellConfig.cellSize * 0.5;
         const highlightedCells: BoardCell[] = [];
+        const figureParts = this.figure.parts.flat();
+        const figurePartsNumber = figureParts.length;
 
         for (const boardRow of this.board1.cells) {
             for (const cell of boardRow) {
-                if (cell.isFilled)
+                if (cell.isNotEmpty)
                     continue;
 
-                for (const part of this.figure.partsAsFlat) {
+                for (const part of figureParts) {
                     const cellWorldMatrix = cell.getWorldTransformMatrix().decomposeMatrix();
                     const cellX = cellWorldMatrix.translateX + cellOffset;
                     const cellY = cellWorldMatrix.translateY + cellOffset;
@@ -61,14 +63,15 @@ export class Stack extends Phaser.Scene {
 
                     const distance = Phaser.Math.Distance.Between(cellX, cellY, figurePartX, figurePartY);
 
-                    if (distance <= cellOffset) {
+                    if (distance <= cellOffset && highlightedCells.indexOf(cell) === -1) {
                         highlightedCells.push(cell);
+                        figureParts.splice(figureParts.indexOf(part), 1);
                     }
                 }
             }
         }
 
-        if (highlightedCells.length == this.figure.partsAsFlat.length) {
+        if (highlightedCells.length == figurePartsNumber) {
             highlightedCells.forEach(cell => {
                 cell.highlight(this.figure.model.textureKey);
             });
@@ -77,6 +80,12 @@ export class Stack extends Phaser.Scene {
                 highlightedCells.forEach(cell => {
                     cell.fill(this.figure.model.textureKey);
                 });
+
+                const x = this.figure.x;
+                const y = this.figure.y;
+
+                this.figure.destroy();
+                this.figure = new Figure(this, x, y, Figures[Phaser.Math.Between(0, Figures.length - 1)]);
             }
         }
     }

@@ -1,5 +1,4 @@
 import {CellConfig, Textures} from "./Configs";
-import {CellFillingData} from "./CellFillingData";
 
 export class BoardCell extends Phaser.GameObjects.Container {
     private readonly emptyKey: string = '';
@@ -26,6 +25,10 @@ export class BoardCell extends Phaser.GameObjects.Container {
 
     public get isHighlighted() {
         return this.highlighted;
+    }
+
+    public get isNotEmpty() {
+        return this.isFilled || this.isFilled;
     }
 
     public fill(imageKey: string) {

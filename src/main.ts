@@ -1,5 +1,6 @@
 import {Game} from "phaser";
 import AnchorPlugin from "phaser3-rex-plugins/plugins/anchor-plugin";
+import DragPlugin from "phaser3-rex-plugins/plugins/drag-plugin";
 import {MenuScene, TicTacToe, Stack} from "./game/scenes";
 
 const gameConfig : Phaser.Types.Core.GameConfig = {
@@ -14,11 +15,18 @@ const gameConfig : Phaser.Types.Core.GameConfig = {
         Stack
     ],
     plugins: {
-        global: [{
-            key: 'rexAnchor',
-            plugin: AnchorPlugin,
-            start: true
-        }]
+        global: [
+            {
+                key: 'rexAnchor',
+                plugin: AnchorPlugin,
+                start: true
+            },
+            {
+                key: 'rexDrag',
+                plugin: DragPlugin,
+                start: true
+            }
+        ]
     }
 };
 

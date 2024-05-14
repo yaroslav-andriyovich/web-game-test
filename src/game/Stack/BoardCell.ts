@@ -1,16 +1,20 @@
 import {CellConfig, Textures} from "./Configs";
+import {CellCoords} from "../../common/CellCoords";
 
 export class BoardCell extends Phaser.GameObjects.Container {
     private readonly emptyKey: string = '';
+
+    public readonly coords: CellCoords;
 
     private background!: Phaser.GameObjects.Image;
     private fillingImage!: Phaser.GameObjects.Image;
     private filled: boolean;
     private highlighted: boolean;
 
-    constructor(scene: Phaser.Scene, x: number, y: number) {
+    constructor(scene: Phaser.Scene, x: number, y: number, coords: CellCoords) {
         super(scene, x, y);
 
+        this.coords = coords;
         this.createBackground();
         this.createFillingImage();
         this.filled = false;
@@ -28,16 +32,21 @@ export class BoardCell extends Phaser.GameObjects.Container {
     }
 
     public get isNotEmpty() {
-        return this.isFilled || this.isFilled;
+        return this.filled || this.highlighted;
+    }
+
+    public get isEmpty() {
+        return !this.filled && !this.highlighted;
     }
 
     public fill(imageKey: string) {
         this.changeFillingTexture(imageKey);
         this.fillingImage.alpha = 1;
+        this.highlighted = false;
         this.filled = true;
     }
 
-    public highlight(imageKey: string) {
+    public highlightMove(imageKey: string) {
         if (this.isFilled)
             return;
 
@@ -46,9 +55,18 @@ export class BoardCell extends Phaser.GameObjects.Container {
         this.highlighted = true;
     }
 
+    public highlightStrike(imageKey: string) {
+        if (!this.isFilled)
+            return;
+
+        this.changeFillingTexture(imageKey);
+        this.fillingImage.alpha = 1;
+        this.highlighted = true;
+    }
+
     public clear() {
-        this.fillingImage.setTexture(this.emptyKey);
         this.fillingImage.setVisible(false);
+        this.fillingImage.setTexture(this.emptyKey);
         this.filled = false;
         this.highlighted = false;
     }

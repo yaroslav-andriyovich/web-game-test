@@ -1,7 +1,7 @@
 import {Grid, GridInputHandler} from "../TicTacToe/grid";
 import {SceneNames} from "./SceneNames";
 import {GameController} from "../TicTacToe/GameController";
-import { Textures, GridConfig } from "../TicTacToe/Configs";
+import {Textures, GridConfig} from "../TicTacToe/Configs";
 import {TextButton} from "../../common";
 import AnchorPlugin from "phaser3-rex-plugins/plugins/anchor-plugin";
 
@@ -65,14 +65,14 @@ export class TicTacToe extends Phaser.Scene {
     }
 
     private createGrid() {
+        this.grid = new Grid(this, 0, 0, this.gridConfig);
+
         const x = (this.gridConfig.cols * this.gridConfig.cell.width) / 2;
         const y = (this.gridConfig.rows * this.gridConfig.cell.height) / 2;
 
-        this.grid = new Grid(this, 0, 0, this.gridConfig);
-
         this.anchor.add(this.grid, {
             centerX: `center-${x}`,
-            centerY: `center-${y}`
+            centerY: `center-${y}`,
         });
     }
 

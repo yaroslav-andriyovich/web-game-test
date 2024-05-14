@@ -1,2 +1,2 @@
 export * from "./Configs";
-export {Figure} from "./Figure";
+export * from "./Figure";

@@ -2,6 +2,8 @@ import {CellConfig, FigureModel} from "./Configs";
 
 export class Figure extends Phaser.GameObjects.Container {
     public readonly model: FigureModel;
+
+    private interactZone!: Phaser.GameObjects.Rectangle;
     private imageParts!: Phaser.GameObjects.Image[][];
 
     constructor(scene: Phaser.Scene, x: number, y: number, model: FigureModel) {
@@ -10,9 +12,10 @@ export class Figure extends Phaser.GameObjects.Container {
         this.model = model;
 
         this.createParts();
+        this.createInteractZone();
 
-        this.setSize(this.getBounds().width, this.getBounds().height);
         this.scene.add.existing(this);
+        this.scene.input.enableDebug(this.interactZone);
     }
 
     public get parts() {
@@ -44,5 +47,14 @@ export class Figure extends Phaser.GameObjects.Container {
                 this.add(cell);
             }
         }
+    }
+
+    private createInteractZone() {
+        let bounds = this.getBounds();
+        const width = bounds.width;
+        const height = bounds.height;
+
+        this.interactZone = this.scene.add.rectangle(0, 0, width, height);
+        this.setInteractive(this.interactZone, Phaser.Geom.Rectangle.Contains);
     }
 }

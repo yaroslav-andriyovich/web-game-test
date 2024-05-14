@@ -1,6 +1,5 @@
 import {BoardConfig} from "./Configs";
 import {BoardCells} from "./BoardCells";
-import {CellFillingData} from "./CellFillingData";
 import {CellCoords} from "../../common/CellCoords";
 
 export class Board extends Phaser.GameObjects.Container {
@@ -21,19 +20,19 @@ export class Board extends Phaser.GameObjects.Container {
         return this.cellsContainer.all;
     }
 
-    public fillCells(fillingData: CellFillingData[]) {
+    public highlightCells(fillingData: CellCoords[], textureKey: string) {
         fillingData.forEach((data) => {
             const cell = this.cellsContainer.all[data.row][data.col];
 
-            cell.fill(data.imageKey);
+            cell.highlightMove(textureKey);
         });
     }
 
-    public highlightCells(fillingData: CellFillingData[]) {
+    public fillCells(fillingData: CellCoords[], textureKey: string) {
         fillingData.forEach((data) => {
             const cell = this.cellsContainer.all[data.row][data.col];
 
-            cell.highlight(data.imageKey);
+            cell.fill(textureKey);
         });
     }
 

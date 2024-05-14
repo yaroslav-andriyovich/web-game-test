@@ -20,8 +20,8 @@ export const BoardConfig = {
 };
 
 export const CellConfig = {
-    cellSize: 35,
-    cellOffset: 2
+    cellSize: 32,
+    cellOffset: 1
 };
 
 export type FigureModel = {

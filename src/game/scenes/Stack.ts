@@ -1,8 +1,8 @@
 import {SceneNames} from "./SceneNames";
 import AnchorPlugin from "phaser3-rex-plugins/plugins/anchor-plugin";
-import {Textures, Figure, Figures, CellConfig} from "../Stack";
+import {Textures} from "../Stack";
 import {Board} from "../Stack/Board";
-import {BoardCell} from "../Stack/BoardCell";
+import {FigureController} from "../Stack/FigureController";
 
 export class Stack extends Phaser.Scene {
     private readonly backgroundColor = 0x221A33;
@@ -11,7 +11,7 @@ export class Stack extends Phaser.Scene {
     private background!: Phaser.GameObjects.Rectangle;
     private board1!: Board;
     private board2!: Board;
-    private figure!: Figure;
+    private figureController!: FigureController;
 
     constructor() {
         super({key: SceneNames.Stack});
@@ -32,79 +32,10 @@ export class Stack extends Phaser.Scene {
         this.anchor = this.plugins.get('rexAnchor') as AnchorPlugin;
     }
 
-    public update ()
-    {
-        this.figure.x = this.game.input.mousePointer.x - this.figure.width * 0.5;
-        this.figure.y = this.game.input.mousePointer.y - this.figure.height;
-
-        this.board1.clearHighlightedCells();
-        this.tryHighlightCellsUnderFigure();
-    }
-
-    private tryHighlightCellsUnderFigure() {
-        const cellOffset = CellConfig.cellSize * 0.5;
-        const highlightedCells: BoardCell[] = [];
-        const figureParts = this.figure.parts.flat();
-        const figurePartsNumber = figureParts.length;
-
-        for (const boardRow of this.board1.cells) {
-            for (const cell of boardRow) {
-                if (cell.isNotEmpty)
-                    continue;
-
-                for (const part of figureParts) {
-                    const cellWorldMatrix = cell.getWorldTransformMatrix().decomposeMatrix();
-                    const cellX = cellWorldMatrix.translateX + cellOffset;
-                    const cellY = cellWorldMatrix.translateY + cellOffset;
-
-                    const figurePartWorldMatrix = part.getWorldTransformMatrix().decomposeMatrix();
-                    const figurePartX = figurePartWorldMatrix.translateX + cellOffset;
-                    const figurePartY = figurePartWorldMatrix.translateY + cellOffset;
-
-                    const distance = Phaser.Math.Distance.Between(cellX, cellY, figurePartX, figurePartY);
-
-                    if (distance <= cellOffset && highlightedCells.indexOf(cell) === -1) {
-                        highlightedCells.push(cell);
-                        figureParts.splice(figureParts.indexOf(part), 1);
-                    }
-                }
-            }
-        }
-
-        if (highlightedCells.length == figurePartsNumber) {
-            highlightedCells.forEach(cell => {
-                cell.highlight(this.figure.model.textureKey);
-            });
-
-            if (this.input.mousePointer.isDown) {
-                highlightedCells.forEach(cell => {
-                    cell.fill(this.figure.model.textureKey);
-                });
-
-                const x = this.figure.x;
-                const y = this.figure.y;
-
-                this.figure.destroy();
-                this.figure = new Figure(this, x, y, Figures[Phaser.Math.Between(0, Figures.length - 1)]);
-            }
-        }
-    }
-
     public create() {
         this.createBackground();
         this.createBoards();
-
-        this.figure = new Figure(this, 1, 148, Figures[8]);
-
-        /*for (let i = 0, k = 100, f = 0; i < Figures.length / 6; i++, k += 125) {
-            for (let j = 0; f < Figures.length && j < 6; j++, f++) {
-                const figure = new Figure(this, k, 12 + j * 120, Figures[f]);
-                this.board1.highlightCells([new CellFillingData(6, 1, figure.model.textureKey)]);
-                //this.board1.fillCells([new CellFillingData(6, 1, figure.model.textureKey)]);
-            }
-        }*/
-
-        //this.board1.clearHighlightedCells();
+        this.figureController = new FigureController(this, this.board1);
     }
 
     private createBackground() {
@@ -118,7 +49,7 @@ export class Stack extends Phaser.Scene {
     }
 
     private createBoards() {
-        this.board1 = new Board(this, 10, 10);
-        this.board2 = new Board(this, 10, 400);
+        this.board1 = new Board(this, 400, 400);
+        this.board2 = new Board(this, 400, 40);
     }
 }

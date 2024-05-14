@@ -1,5 +1,6 @@
 import {BoardConfig, CellConfig} from "./Configs";
 import {BoardCell} from "./BoardCell";
+import {CellCoords} from "../../common/CellCoords";
 
 export class BoardCells extends Phaser.GameObjects.Container {
     public cells!: BoardCell[][];
@@ -11,6 +12,8 @@ export class BoardCells extends Phaser.GameObjects.Container {
 
         this.setSize(this.getBounds().width, this.getBounds().height);
         this.scene.add.existing(this);
+        //this.setInteractive()
+        //this.scene.input.enableDebug(this);
     }
 
     public get all() {
@@ -29,7 +32,7 @@ export class BoardCells extends Phaser.GameObjects.Container {
                 const x = j * (offset + size);
                 const y = i * (offset + size);
 
-                const cell = new BoardCell(this.scene, x, y);
+                const cell = new BoardCell(this.scene, x, y, new CellCoords(i, j));
 
                 this.cells[i][j] = cell;
 

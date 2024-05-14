@@ -2,6 +2,7 @@ import {Board} from "./Board";
 import DragPlugin from "phaser3-rex-plugins/plugins/drag-plugin";
 import {CellConfig, Figure, Figures} from "./index";
 import {CellCoords} from "../../common/CellCoords";
+import {Cell} from "../TicTacToe/grid/cell";
 
 export class FigureController {
     private readonly scene: Phaser.Scene;
@@ -100,9 +101,60 @@ export class FigureController {
         if (this.highlightedCells.length == figurePartsNumber) {
             this.canFill = true;
             this.board.highlightCells(this.highlightedCells, this.draggable.model.textureKey);
+            this.checkRows();
         } else {
             this.canFill = false;
         }
+    }
+
+    private checkRows() {
+        let comboCols: CellCoords[] = [];
+
+        for (let i = 0; i < this.board.cells[0].length; i++) {
+            const coords = [];
+
+            for (let j = 0; j < this.board.cells.length; j++) {
+                const cell = this.board.cells[j][i];
+
+                const index = this.highlightedCells.indexOf(cell.coords);
+
+                if (cell.isEmpty && index !== -1) {
+                    coords.push(this.highlightedCells.at(index));
+                }
+                else if (cell.isNotEmpty) {
+                    coords.push(cell.coords);
+                } else
+                    break;
+            }
+
+            if (coords.length == this.board.cells[i].length)
+                comboCols = comboCols.concat(coords);
+        }
+
+        let comboRows: CellCoords[] = [];
+
+        for (let i = 0; i < this.board.cells.length; i++) {
+            const coords = [];
+
+            for (let j = 0; j < this.board.cells[i].length; j++) {
+                const cell = this.board.cells[i][j];
+
+                const index = this.highlightedCells.indexOf(cell.coords);
+
+                if (cell.isEmpty && index !== -1) {
+                    coords.push(this.highlightedCells.at(index));
+                }
+                else if (cell.isNotEmpty) {
+                    coords.push(cell.coords);
+                } else
+                    break;
+            }
+
+            if (coords.length == this.board.cells[i].length)
+                comboRows = comboRows.concat(coords);
+        }
+
+        this.board.highlightComboCells(comboCols.concat(comboRows), this.draggable.model.textureKey);
     }
 
     private onDragEnd(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) {

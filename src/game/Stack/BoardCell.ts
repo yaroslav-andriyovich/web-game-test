@@ -8,8 +8,9 @@ export class BoardCell extends Phaser.GameObjects.Container {
 
     private background!: Phaser.GameObjects.Image;
     private fillingImage!: Phaser.GameObjects.Image;
-    private filled: boolean;
     private highlighted: boolean;
+    private filled: boolean;
+    private fillTextureKey!: string;
 
     constructor(scene: Phaser.Scene, x: number, y: number, coords: CellCoords) {
         super(scene, x, y);
@@ -40,13 +41,14 @@ export class BoardCell extends Phaser.GameObjects.Container {
     }
 
     public fill(imageKey: string) {
+        this.fillTextureKey = imageKey;
         this.changeFillingTexture(imageKey);
         this.fillingImage.alpha = 1;
         this.highlighted = false;
         this.filled = true;
     }
 
-    public highlightMove(imageKey: string) {
+    public highlight(imageKey: string) {
         if (this.isFilled)
             return;
 
@@ -55,18 +57,33 @@ export class BoardCell extends Phaser.GameObjects.Container {
         this.highlighted = true;
     }
 
-    public highlightStrike(imageKey: string) {
-        if (!this.isFilled)
-            return;
+    public highlightCombo(imageKey: string) {
+        /*if (!this.isFilled)
+            return;*/
 
         this.changeFillingTexture(imageKey);
         this.fillingImage.alpha = 1;
         this.highlighted = true;
     }
 
+    public clearHighlighting() {
+        if (!this.isHighlighted)
+            return;
+
+        if (this.isFilled) {
+            this.fillingImage.setTexture(this.fillTextureKey);
+        } else {
+            this.fillingImage.setVisible(false);
+            this.fillingImage.setTexture(this.emptyKey);
+        }
+
+        this.highlighted = false;
+    }
+
     public clear() {
         this.fillingImage.setVisible(false);
         this.fillingImage.setTexture(this.emptyKey);
+        this.fillTextureKey = this.emptyKey;
         this.filled = false;
         this.highlighted = false;
     }

@@ -20,37 +20,45 @@ export class Board extends Phaser.GameObjects.Container {
         return this.cellsContainer.all;
     }
 
-    public highlightCells(fillingData: CellCoords[], textureKey: string) {
-        fillingData.forEach((data) => {
-            const cell = this.cellsContainer.all[data.row][data.col];
+    public highlightCells(cellCoords: CellCoords[], textureKey: string) {
+        for (const coords of cellCoords) {
+            const cell = this.cellsContainer.all[coords.row][coords.col];
 
-            cell.highlightMove(textureKey);
-        });
+            cell.highlight(textureKey);
+        }
     }
 
-    public fillCells(fillingData: CellCoords[], textureKey: string) {
-        fillingData.forEach((data) => {
-            const cell = this.cellsContainer.all[data.row][data.col];
+    public highlightComboCells(cellCoords: CellCoords[], textureKey: string) {
+        for (const coords of cellCoords) {
+            const cell = this.cellsContainer.all[coords.row][coords.col];
+
+            cell.highlightCombo(textureKey);
+        }
+    }
+
+    public fillCells(cellCoords: CellCoords[], textureKey: string) {
+        for (const coords of cellCoords) {
+            const cell = this.cellsContainer.all[coords.row][coords.col];
 
             cell.fill(textureKey);
-        });
+        }
     }
 
     public clearHighlightedCells() {
-        this.cellsContainer.all.forEach((row, i) => {
-            row.forEach((cell, j) => {
-                if (cell.isHighlighted && !cell.isFilled)
-                    cell.clear();
-            });
-        });
+        for (const row of this.cellsContainer.all) {
+            for (const cell of row) {
+                if (cell.isHighlighted)
+                    cell.clearHighlighting();
+            }
+        }
     }
 
     public clearCells(cellCoords: CellCoords[]) {
-        cellCoords.forEach((coords) => {
+        for (const coords of cellCoords) {
             const cell = this.cellsContainer.all[coords.row][coords.col];
 
             cell.clear();
-        });
+        }
     }
 
     private createBackground(){

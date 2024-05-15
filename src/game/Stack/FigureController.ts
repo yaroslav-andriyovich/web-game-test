@@ -35,13 +35,16 @@ export class FigureController {
 
     private createFigures() {
         this.createFigure(this.spawnPosition.x, this.spawnPosition.y);
-        this.createFigure(this.spawnPosition.x, this.spawnPosition.y-200);
-        this.createFigure(this.spawnPosition.x, this.spawnPosition.y-400);
     }
 
     private createFigure(x: number, y: number) {
         const model = Figures[Phaser.Math.Between(0, Figures.length - 1)]
         const figure = new Figure(this.scene, x, y, model);
+
+        if (!this.boardFiller.canPlaceFigureOnBoard(figure)) {
+            figure.deactivate();
+            return;
+        }
 
         this.dragPlugin.add(figure);
 

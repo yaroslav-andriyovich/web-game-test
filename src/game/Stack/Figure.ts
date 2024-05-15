@@ -15,11 +15,20 @@ export class Figure extends Phaser.GameObjects.Container {
         this.createInteractZone();
 
         this.scene.add.existing(this);
-        this.scene.input.enableDebug(this.interactZone);
     }
 
     public get parts() {
         return this.imageParts;
+    }
+
+    public activate() {
+        this.enableInteractive();
+        this.alpha = 1;
+    }
+
+    public deactivate() {
+        this.disableInteractive();
+        this.alpha = 0.4;
     }
 
     private createParts() {
@@ -55,6 +64,10 @@ export class Figure extends Phaser.GameObjects.Container {
         const height = bounds.height;
 
         this.interactZone = this.scene.add.rectangle(0, 0, width, height);
+        this.enableInteractive();
+    }
+
+    private enableInteractive() {
         this.setInteractive(this.interactZone, Phaser.Geom.Rectangle.Contains);
     }
 }

@@ -102,6 +102,36 @@ export class BoardFiller {
 
         return comboRows;
     }
+
+    public canPlaceFigureOnBoard(figure: Figure): boolean {
+        for (let i = 0; i <= this.board.cells.length - figure.parts.length; i++) {
+            for (let j = 0; j <= this.board.cells[0].length - figure.parts[0].length; j++) {
+                if (this.canPlaceFigureAtPosition(figure, i, j)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private canPlaceFigureAtPosition(figure: Figure, row: number, col: number): boolean {
+        for (let i = 0; i < figure.parts.length; i++) {
+            for (let j = 0; j < figure.parts[i].length; j++) {
+                const boardRow = row + i;
+                const boardCol = col + j;
+
+                if (boardRow < 0 || boardRow >= this.board.cells.length
+                    || boardCol < 0 || boardCol >= this.board.cells[0].length) {
+                    return false;
+                }
+
+                if (figure.model.parts[i][j] === 1 && this.board.cells[boardRow][boardCol].isFilled) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
 
 enum MatrixDirection {

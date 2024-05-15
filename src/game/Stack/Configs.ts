@@ -95,15 +95,6 @@ export const Figures: FigureModel[] = [
         ]
     },
     {
-        textureKey: Textures.green.key,
-        parts: [
-            [ 1 ],
-            [ 1 ],
-            [ 1 ],
-            [ 1 ]
-        ]
-    },
-    {
         textureKey: Textures.orange.key,
         parts: [
             [ 1, 1, 1 ],

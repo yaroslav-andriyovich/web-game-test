@@ -58,11 +58,11 @@ export class BoardCell extends Phaser.GameObjects.Container {
     }
 
     public highlightCombo(imageKey: string) {
-        /*if (!this.isFilled)
-            return;*/
-
         this.changeFillingTexture(imageKey);
-        this.fillingImage.alpha = 1;
+
+        if (!this.isHighlighted)
+            this.fillingImage.alpha = 1;
+
         this.highlighted = true;
     }
 

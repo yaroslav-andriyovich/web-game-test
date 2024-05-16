@@ -69,7 +69,15 @@ export class BoardFiller {
     public fill() {
         this.board.fillCells(this.highlightedCells, this.fillingTextureKey);
         this.board.clearCells(this.comboCells);
+
+        const result: FillResult = {
+            filledCells: this.highlightedCells,
+            comboCells: this.comboCells
+        };
+
         this.clear();
+
+        return result;
     }
 
     private highlightCombo() {
@@ -133,6 +141,11 @@ export class BoardFiller {
         return true;
     }
 }
+
+export type FillResult = {
+    filledCells: CellCoords[],
+    comboCells: CellCoords[]
+};
 
 enum MatrixDirection {
     rows,

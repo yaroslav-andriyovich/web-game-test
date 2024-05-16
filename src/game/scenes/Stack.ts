@@ -1,16 +1,17 @@
 import {SceneNames} from "./SceneNames";
-import AnchorPlugin from "phaser3-rex-plugins/plugins/anchor-plugin";
-import {Textures} from "../Stack";
+import {Figures, Textures} from "../Stack";
 import {Board} from "../Stack/Board";
 import {FigureController} from "../Stack/FigureController";
+import {AvailableFigureIndexesProvider} from "../Stack/AvailableFigureIndexesProvider";
+import {FillResult} from "../Stack/BoardFiller";
 
 export class Stack extends Phaser.Scene {
     private readonly backgroundColor = 0x221A33;
 
-    private anchor!: AnchorPlugin;
     private background!: Phaser.GameObjects.Rectangle;
     private board1!: Board;
     private board2!: Board;
+    private availableFigures!: AvailableFigureIndexesProvider;
     private figureController!: FigureController;
 
     constructor() {
@@ -28,21 +29,21 @@ export class Stack extends Phaser.Scene {
         this.load.image(Textures.purple.key, Textures.purple.url);
         this.load.image(Textures.red.key, Textures.red.url);
         this.load.image(Textures.yellow.key, Textures.yellow.url);
-
-        this.anchor = this.plugins.get('rexAnchor') as AnchorPlugin;
     }
 
     public create() {
         this.createBackground();
         this.createBoards();
-        this.figureController = new FigureController(this, this.board1);
+        this.createFigureControllers();
+
+        this.simulateServer_ReceivedFigures();
     }
 
     private createBackground() {
         this.background = this.add.rectangle(0, 0, 10, 10, this.backgroundColor);
         this.background.setOrigin(0);
 
-        this.anchor.add(this.background, {
+        this.rexAnchor.add(this.background, {
             width: '100%',
             height: '100%'
         });
@@ -51,5 +52,27 @@ export class Stack extends Phaser.Scene {
     private createBoards() {
         this.board1 = new Board(this, 400, 400);
         this.board2 = new Board(this, 400, 40);
+    }
+
+    private createFigureControllers() {
+        this.availableFigures = new AvailableFigureIndexesProvider();
+        this.figureController = new FigureController(this, this.board1, this.availableFigures);
+        this.figureController.eventEmitter.on(this.figureController.fillEvent, this.simulateServer_ProcessPlayerMove, this);
+    }
+
+    private simulateServer_ProcessPlayerMove(fillResult: FillResult) {
+        const randomIndex = Phaser.Math.Between(0, Figures.length - 1);
+
+        this.availableFigures.addFigure(randomIndex);
+    }
+
+    private simulateServer_ReceivedFigures() {
+        const figuresNumber = 3;
+
+        for (let i = 0; i < figuresNumber; i++) {
+            const randomIndex = Phaser.Math.Between(0, Figures.length - 1);
+
+            this.availableFigures.addFigure(randomIndex);
+        }
     }
 }

@@ -1,9 +1,10 @@
 import {BoardConfig} from "./Configs";
 import {BoardCells} from "./BoardCells";
 import {CellCoords} from "../../common/CellCoords";
+import UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
 
 export class Board extends Phaser.GameObjects.Container {
-    private background!: Phaser.GameObjects.Rectangle;
+    private background!: UIPlugin.RoundRectangle;
     private cellsContainer!: BoardCells;
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
@@ -62,7 +63,7 @@ export class Board extends Phaser.GameObjects.Container {
     }
 
     private createBackground(){
-        this.background = this.scene.add.rectangle(0, 0, 10, 10, BoardConfig.bgColor);
+        this.background = this.scene.rexUI.add.roundRectangle(0, 0, 10, 10, 0.25, BoardConfig.bgColor);
         this.background.setOrigin(0);
 
         this.add(this.background);

@@ -3,7 +3,6 @@ import {SceneNames} from "./SceneNames";
 import {GameController} from "../TicTacToe/GameController";
 import {Textures, GridConfig} from "../TicTacToe/Configs";
 import {TextButton} from "../../common";
-import AnchorPlugin from "phaser3-rex-plugins/plugins/anchor-plugin";
 
 export class TicTacToe extends Phaser.Scene {
     private text!: Phaser.GameObjects.Text;
@@ -12,7 +11,6 @@ export class TicTacToe extends Phaser.Scene {
     private gridInputHandler!: GridInputHandler;
     private gameController!: GameController;
     private restartButton!: TextButton;
-    private anchor!: AnchorPlugin;
 
     constructor() {
         super({ key: SceneNames.TicTacToe });
@@ -21,7 +19,6 @@ export class TicTacToe extends Phaser.Scene {
     public preload() {
         this.load.image(Textures.pieces.x.key, Textures.pieces.x.url);
         this.load.image(Textures.pieces.o.key, Textures.pieces.o.url);
-        this.anchor = this.plugins.get('rexAnchor') as AnchorPlugin;
     }
 
     public create() {
@@ -58,7 +55,7 @@ export class TicTacToe extends Phaser.Scene {
             color: '#fa7269'
         }).setOrigin(0.5);
 
-        this.anchor.add(this.text, {
+        this.rexAnchor.add(this.text, {
             centerX: `center`,
             y: `10%`
         });
@@ -70,7 +67,7 @@ export class TicTacToe extends Phaser.Scene {
         const x = (this.gridConfig.cols * this.gridConfig.cell.width) / 2;
         const y = (this.gridConfig.rows * this.gridConfig.cell.height) / 2;
 
-        this.anchor.add(this.grid, {
+        this.rexAnchor.add(this.grid, {
             centerX: `center-${x}`,
             centerY: `center-${y}`,
         });
@@ -79,7 +76,7 @@ export class TicTacToe extends Phaser.Scene {
     private createRestartButton() {
         this.restartButton = new TextButton(this, 0, 0, "Restart", () => this.scene.restart());
 
-        this.anchor.add(this.restartButton, {
+        this.rexAnchor.add(this.restartButton, {
             centerX: `center`,
             y: `90%`
         });

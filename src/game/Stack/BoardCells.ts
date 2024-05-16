@@ -12,8 +12,6 @@ export class BoardCells extends Phaser.GameObjects.Container {
 
         this.setSize(this.getBounds().width, this.getBounds().height);
         this.scene.add.existing(this);
-        //this.setInteractive()
-        //this.scene.input.enableDebug(this);
     }
 
     public get all() {

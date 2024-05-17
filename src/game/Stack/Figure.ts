@@ -2,14 +2,16 @@ import {CellConfig, FigureModel} from "./Configs";
 
 export class Figure extends Phaser.GameObjects.Container {
     public readonly model: FigureModel;
+    public readonly index: number;
 
     private interactZone!: Phaser.GameObjects.Rectangle;
     private imageParts!: Phaser.GameObjects.Image[][];
 
-    constructor(scene: Phaser.Scene, x: number, y: number, model: FigureModel) {
+    constructor(scene: Phaser.Scene, x: number, y: number, model: FigureModel, index: number) {
         super(scene, x, y);
 
         this.model = model;
+        this.index = index;
 
         this.createParts();
         this.createInteractZone();

@@ -61,6 +61,9 @@ export class Stack extends Phaser.Scene {
     }
 
     private simulateServer_ProcessPlayerMove(fillResult: FillResult) {
+        this.board2.fillCells(fillResult.filledCells, Figures[fillResult.figureIndex].textureKey);
+        this.board2.clearCells(fillResult.comboCells);
+
         const randomIndex = Phaser.Math.Between(0, Figures.length - 1);
 
         this.availableFigures.addFigure(randomIndex);

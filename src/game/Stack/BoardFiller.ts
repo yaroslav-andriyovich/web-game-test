@@ -1,14 +1,14 @@
 import {Board} from "./Board";
 import {CellCoords} from "../../common/CellCoords";
 import {Figure} from "./Figure";
-import {CellConfig} from "./Configs";
+import {CellConfig, Figures} from "./Configs";
 
 export class BoardFiller {
     private readonly board: Board;
 
     private highlightedCells!: CellCoords[];
     private comboCells!: CellCoords[];
-    private fillingTextureKey: string;
+    private currentFigure!: Figure;
     public canFill!: boolean;
 
     constructor(board: Board) {
@@ -20,7 +20,7 @@ export class BoardFiller {
     public clear() {
         this.highlightedCells = [];
         this.comboCells = [];
-        this.fillingTextureKey = '';
+        this.currentFigure = null;
         this.canFill = false;
     }
 
@@ -58,21 +58,22 @@ export class BoardFiller {
 
         if (this.highlightedCells.length == figurePartsNumber) {
             this.canFill = true;
-            this.fillingTextureKey = figure.model.textureKey;
-            this.board.highlightCells(this.highlightedCells, this.fillingTextureKey);
+            this.currentFigure = figure;
+            this.board.highlightCells(this.highlightedCells, figure.model.textureKey);
             this.highlightCombo();
         } else {
-            this.canFill = false;
+            this.clear();
         }
     }
 
     public fill() {
-        this.board.fillCells(this.highlightedCells, this.fillingTextureKey);
+        this.board.fillCells(this.highlightedCells, this.currentFigure.model.textureKey);
         this.board.clearCells(this.comboCells);
 
         const result: FillResult = {
             filledCells: this.highlightedCells,
-            comboCells: this.comboCells
+            comboCells: this.comboCells,
+            figureIndex: this.currentFigure.index
         };
 
         this.clear();
@@ -85,7 +86,7 @@ export class BoardFiller {
         const comboCols = this.checkComboHighlighted(MatrixDirection.cols);
         this.comboCells = comboRows.concat(comboCols);
 
-        this.board.highlightComboCells(this.comboCells, this.fillingTextureKey);
+        this.board.highlightComboCells(this.comboCells, this.currentFigure.model.textureKey);
     }
 
     private checkComboHighlighted(direction: MatrixDirection) {
@@ -144,7 +145,8 @@ export class BoardFiller {
 
 export type FillResult = {
     filledCells: CellCoords[],
-    comboCells: CellCoords[]
+    comboCells: CellCoords[],
+    figureIndex: number
 };
 
 enum MatrixDirection {

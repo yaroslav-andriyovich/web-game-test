@@ -31,7 +31,7 @@ export class FigureController {
     private createFigure() {
         const figureIndex = this.availableFigures.getNext();
         const model = Figures[figureIndex];
-        const figure = new Figure(this.scene, 0, 0, model);
+        const figure = new Figure(this.scene, 0, 0, model, figureIndex);
 
         this.scene.rexDrag.add(figure);
 

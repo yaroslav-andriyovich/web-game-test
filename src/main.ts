@@ -14,10 +14,19 @@ declare module 'phaser' {
 
 const gameConfig : Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
-    width: 720,
-    height: 720,
+    width: 600,
+    height: 800,
     parent: 'game-container',
     backgroundColor: '#fff',
+    antialias: true,
+    disableContextMenu: true,
+    autoMobilePipeline: true,
+    autoRound: true,
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        parent: 'game-container'
+    },
     scene: [
         MenuScene,
         TicTacToe,

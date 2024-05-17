@@ -4,6 +4,7 @@ import {Board} from "../Stack/Board";
 import {FigureController} from "../Stack/FigureController";
 import {AvailableFigureIndexesProvider} from "../Stack/AvailableFigureIndexesProvider";
 import {FillResult} from "../Stack/BoardFiller";
+import {FigureContainer} from "../Stack/FigureContainer";
 
 export class Stack extends Phaser.Scene {
     private readonly backgroundColor = 0x221A33;
@@ -12,6 +13,7 @@ export class Stack extends Phaser.Scene {
     private board1!: Board;
     private board2!: Board;
     private availableFigures!: AvailableFigureIndexesProvider;
+    private figureContainer1!: FigureContainer;
     private figureController!: FigureController;
 
     constructor() {
@@ -50,14 +52,30 @@ export class Stack extends Phaser.Scene {
     }
 
     private createBoards() {
-        this.board1 = new Board(this, 400, 400);
-        this.board2 = new Board(this, 400, 40);
+        this.board1 = new Board(this, 200, 300);
+        this.board2 = new Board(this, 200, 10);
+
+        this.rexAnchor.add(this.board2, {
+            centerX: `center-${this.board2.getBounds().width / 2}`,
+            centerY: `2%`
+        });
+
+        this.rexAnchor.add(this.board1, {
+            centerX: `center-${this.board1.getBounds().width / 2}`,
+            centerY: `4%+${this.board2.getBounds().height}`
+        });
     }
 
     private createFigureControllers() {
         this.availableFigures = new AvailableFigureIndexesProvider();
-        this.figureController = new FigureController(this, this.board1, this.availableFigures);
+        this.figureContainer1 = new FigureContainer(this, 0, 0);
+        this.figureController = new FigureController(this, this.board1, this.availableFigures, this.figureContainer1);
         this.figureController.eventEmitter.on(this.figureController.fillEvent, this.simulateServer_ProcessPlayerMove, this);
+
+        this.rexAnchor.add(this.figureContainer1.gameObject, {
+            centerX: `center-${this.figureContainer1.maxWidth / 2}`,
+            centerY: `10%+${this.board1.getBounds().height * 2}`
+        });
     }
 
     private simulateServer_ProcessPlayerMove(fillResult: FillResult) {

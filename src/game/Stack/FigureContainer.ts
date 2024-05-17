@@ -1,15 +1,25 @@
 import UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
 import {Figure} from "./Figure";
+import {CellConfig} from "./Configs";
 
 export class FigureContainer {
     private readonly sizer: UIPlugin.Sizer;
+    private readonly itemSpace: number = 150;
 
-    constructor(scene: Phaser.Scene) {
+    constructor(scene: Phaser.Scene, x: number, y: number) {
         this.sizer = scene.rexUI.add.sizer({
-            x: 10, y: 480,
+            x: x, y: y,
             orientation: 'x',
-            space: { item: 130 }
+            space: { item: this.itemSpace }
         }).setOrigin(0);
+    }
+
+    public get gameObject() {
+        return this.sizer;
+    }
+
+    public get maxWidth() {
+        return (4 * CellConfig.cellSize) + (4 * CellConfig.cellOffset) + (3 * (this.itemSpace / 2));
     }
 
     public get size() {

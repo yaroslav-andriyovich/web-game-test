@@ -16,7 +16,6 @@ const gameConfig : Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
     width: 600,
     height: 800,
-    parent: 'game-container',
     backgroundColor: '#fff',
     antialias: true,
     disableContextMenu: true,
@@ -24,8 +23,7 @@ const gameConfig : Phaser.Types.Core.GameConfig = {
     autoRound: true,
     scale: {
         mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH,
-        parent: 'game-container'
+        autoCenter: Phaser.Scale.CENTER_BOTH
     },
     scene: [
         MenuScene,

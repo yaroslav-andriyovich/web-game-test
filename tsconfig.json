@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
         "outDir": "./dist/",
-        "module": "es6",
-        "target": "es5",
+        "module": "esnext",
+        "target": "esnext",
         "allowJs": true,
         "moduleResolution": "node",
         "lib": ["es6", "dom", "dom.iterable", "scripthost", "esnext"],

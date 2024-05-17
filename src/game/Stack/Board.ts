@@ -10,9 +10,8 @@ export class Board extends Phaser.GameObjects.Container {
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y);
 
-        this.createBackground();
         this.createCells();
-        this.resizeBackground();
+        this.createBackground();
 
         this.scene.add.existing(this);
     }
@@ -62,11 +61,16 @@ export class Board extends Phaser.GameObjects.Container {
         }
     }
 
-    private createBackground(){
-        this.background = this.scene.rexUI.add.roundRectangle(0, 0, 10, 10, 0.25, BoardConfig.bgColor);
+    private createBackground() {
+        const padding = BoardConfig.cellsPadding * 2;
+        const width = this.cellsContainer.width + padding;
+        const height = this.cellsContainer.height + padding;
+
+        this.background = this.scene.rexUI.add.roundRectangle(0, 0, width, height, 0.25, BoardConfig.bgColor);
         this.background.setOrigin(0);
 
         this.add(this.background);
+        this.sendToBack(this.background);
     }
 
     private createCells() {
@@ -76,13 +80,5 @@ export class Board extends Phaser.GameObjects.Container {
         this.cellsContainer = new BoardCells(this.scene, x, y);
 
         this.add(this.cellsContainer);
-    }
-
-    private resizeBackground() {
-        const padding = BoardConfig.cellsPadding * 2;
-        const width = this.cellsContainer.width + padding;
-        const height = this.cellsContainer.height + padding;
-
-        this.background.setDisplaySize(width, height);
     }
 }

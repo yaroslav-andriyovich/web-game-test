@@ -17,12 +17,12 @@ export class FigureController {
 
     private draggable!: Figure;
 
-    constructor(scene: Phaser.Scene, board: Board, figureGenerator: AvailableFigureIndexesProvider) {
+    constructor(scene: Phaser.Scene, board: Board, figureGenerator: AvailableFigureIndexesProvider, figureContainer: FigureContainer) {
         this.eventEmitter = new Phaser.Events.EventEmitter();
         this.scene = scene;
         this.board = board;
         this.availableFigures = figureGenerator;
-        this.figureContainer = new FigureContainer(scene);
+        this.figureContainer = figureContainer;
         this.boardFiller = new BoardFiller(this.board);
 
         this.availableFigures.eventEmitter.on(this.availableFigures.figureAddEvent, this.onFigureAdded, this);

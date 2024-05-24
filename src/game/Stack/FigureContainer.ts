@@ -1,49 +1,48 @@
-import UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
+import {Sizer} from "phaser3-rex-plugins/templates/ui/ui-components";
 import {Figure} from "./Figure";
-import {CellConfig} from "./Configs";
 
-export class FigureContainer {
-    private readonly sizer: UIPlugin.Sizer;
-    private readonly itemSpace: number = 150;
-
+export class FigureContainer extends Sizer {
     constructor(scene: Phaser.Scene, x: number, y: number) {
-        this.sizer = scene.rexUI.add.sizer({
-            x: x, y: y,
-            orientation: 'x',
-            space: { item: this.itemSpace }
-        }).setOrigin(0);
+        super(scene, x, y);
+
+        this.setOrientation("x");
+        this.setItemSpacing(200);
+        this.setOrigin(0.5);
+
+        this.scene.add.existing(this);
     }
 
-    public get gameObject() {
-        return this.sizer;
+    public get figuresNumber() {
+        return this.getChildren().length;
     }
 
-    public get maxWidth() {
-        return (4 * CellConfig.cellSize) + (4 * CellConfig.cellOffset) + (3 * (this.itemSpace / 2));
-    }
+    public addFigure(figure: Figure) {
+        this.setFigureScale(figure);
 
-    public get size() {
-        return this.sizer.getChildren().length;
-    }
-
-    public add(figure: Figure) {
-        this.sizer.add(figure, { expand: true })
+        this.add(figure, { expand: false })
             .layout();
     }
 
-    public remove(figure: Figure) {
-        this.sizer.remove(figure)
+    public removeFigure(figure: Figure) {
+        this.remove(figure)
             .layout();
     }
 
     public resetFigurePositions() {
-        this.sizer.layout();
+        this.getChildren().forEach((figure: Figure) => {
+            this.setFigureScale(figure);
+        });
+
+        this.layout();
     }
 
     public get figures() {
-        return this.sizer
-            .getChildren()
+        return this.getChildren()
             .filter((child: any) =>
                 child instanceof Figure) as Figure[];
+    }
+
+    private setFigureScale(figure: Figure) {
+        figure.setScale(this.scale);
     }
 }

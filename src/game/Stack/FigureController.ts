@@ -39,12 +39,13 @@ export class FigureController {
         figure.on('drag', this.onDrag, this);
         figure.on('dragend', this.onDragEnd, this);
 
-        this.figureContainer.add(figure);
+        this.figureContainer.addFigure(figure);
     }
 
-    private onDragStart(pointer: Phaser.Input.Pointer, gameObject: any, dragX: number, dragY: number) {
+    private onDragStart(pointer: Phaser.Input.Pointer, gameObject: any) {
         if (gameObject instanceof Figure) {
             this.draggable = gameObject;
+            this.draggable.setScale(1);
             this.setFigureTopDepth(gameObject);
         } else {
             this.draggable = null;
@@ -54,6 +55,8 @@ export class FigureController {
     private onDrag(pointer: Phaser.Input.Pointer, dragX: number, dragY: number) {
         if (!this.draggable)
             return;
+
+        this.draggable.setPosition(this.draggable.x, this.draggable.y);
 
         this.board.clearHighlightedCells();
         this.boardFiller.checkBoardHighlighting(this.draggable);
@@ -89,7 +92,7 @@ export class FigureController {
         if (!this.draggable)
             return;
 
-        this.figureContainer.remove(this.draggable);
+        this.figureContainer.removeFigure(this.draggable);
 
         this.draggable.off('dragstart', this.onDragStart, this);
         this.draggable.off('drag', this.onDrag, this);
@@ -99,7 +102,7 @@ export class FigureController {
     }
 
     private onFigureAdded() {
-        if (this.figureContainer.size < this.availableFiguresNumber) {
+        if (this.figureContainer.figuresNumber < this.availableFiguresNumber) {
             this.createFigure();
             this.checkFigurePlacing();
         }

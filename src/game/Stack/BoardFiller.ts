@@ -37,13 +37,17 @@ export class BoardFiller {
                     continue;
 
                 const cellWorldMatrix = cell.getWorldTransformMatrix().decomposeMatrix();
-                const cellX = cellWorldMatrix.translateX + cellOffset;
-                const cellY = cellWorldMatrix.translateY + cellOffset;
+                /*const cellX = cellWorldMatrix.translateX + cellOffset;
+                const cellY = cellWorldMatrix.translateY + cellOffset;*/
+                const cellX = cellWorldMatrix.translateX;
+                const cellY = cellWorldMatrix.translateY;
 
                 for (const part of figureParts) {
                     const figurePartWorldMatrix = part.getWorldTransformMatrix().decomposeMatrix();
-                    const figurePartX = figurePartWorldMatrix.translateX + cellOffset;
-                    const figurePartY = figurePartWorldMatrix.translateY + cellOffset;
+                    /*const figurePartX = figurePartWorldMatrix.translateX + cellOffset;
+                    const figurePartY = figurePartWorldMatrix.translateY + cellOffset;*/
+                    const figurePartX = figurePartWorldMatrix.translateX;
+                    const figurePartY = figurePartWorldMatrix.translateY;
 
                     const distance = Phaser.Math.Distance.Between(cellX, cellY, figurePartX, figurePartY);
                     const coords = cell.coords;

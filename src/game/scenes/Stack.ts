@@ -1,5 +1,5 @@
 import {SceneNames} from "./SceneNames";
-import {Figures, Textures} from "../Stack";
+import {Figure, Figures, Textures} from "../Stack";
 import {Board} from "../Stack/Board";
 import {FigureController} from "../Stack/FigureController";
 import {AvailableFigureIndexesProvider} from "../Stack/AvailableFigureIndexesProvider";
@@ -10,10 +10,11 @@ export class Stack extends Phaser.Scene {
     private readonly backgroundColor = 0x221A33;
 
     private background!: Phaser.GameObjects.Rectangle;
-    private board1!: Board;
-    private board2!: Board;
+    private enemyBoard!: Board;
+    private enemyFigures!: FigureContainer;
+    private playerBoard!: Board;
     private availableFigures!: AvailableFigureIndexesProvider;
-    private figureContainer1!: FigureContainer;
+    private playerFigures!: FigureContainer;
     private figureController!: FigureController;
 
     constructor() {
@@ -34,53 +35,65 @@ export class Stack extends Phaser.Scene {
     }
 
     public create() {
-        this.createBackground();
-        this.createBoards();
-        this.createFigureControllers();
+        this.cameras.main.setBackgroundColor(this.backgroundColor);
+        this.createEnemy();
+        this.createPlayer();
 
         this.simulateServer_ReceivedFigures();
     }
 
-    private createBackground() {
-        this.background = this.add.rectangle(0, 0, 10, 10, this.backgroundColor);
-        this.background.setOrigin(0);
+    private createEnemy() {
+        this.enemyBoard = new Board(this, 0, 0);
+        this.enemyBoard.setScale(0.4);
 
-        this.rexAnchor.add(this.background, {
-            width: '100%',
-            height: '100%'
-        });
-    }
-
-    private createBoards() {
-        this.board1 = new Board(this, 200, 300);
-        this.board2 = new Board(this, 200, 10);
-
-        this.rexAnchor.add(this.board2, {
-            centerX: `center-${this.board2.getBounds().width / 2}`,
+        this.rexAnchor.add(this.enemyBoard, {
+            centerX: `center-${this.enemyBoard.getBounds().width / 2}`,
             centerY: `2%`
         });
 
-        this.rexAnchor.add(this.board1, {
-            centerX: `center-${this.board1.getBounds().width / 2}`,
-            centerY: `4%+${this.board2.getBounds().height}`
+        this.enemyFigures = new FigureContainer(this, 0, 0);
+        this.enemyFigures.setScale(0.3);
+
+        for (let i = 0; i < 3; i++) {
+            const figureIndex = Phaser.Math.Between(0, Figures.length - 1);
+            const model = Figures[figureIndex];
+            const figure = new Figure(this, 0, 0, model, figureIndex);
+
+            this.enemyFigures.addFigure(figure);
+        }
+
+        this.rexAnchor.add(this.enemyFigures, {
+            centerX: `center`,
+            centerY: `6%+${this.enemyBoard.y + this.enemyBoard.height * this.enemyBoard.scale}`
         });
     }
 
-    private createFigureControllers() {
+    private createPlayer() {
+        this.playerBoard = new Board(this, 0, 0);
+
+        const bounds = this.playerBoard.getBounds();
+
+        this.rexAnchor.add(this.playerBoard, {
+            centerX: `center-${bounds.width / 2}`,
+            centerY: `center-${bounds.height / 2.7}`
+        });
+
         this.availableFigures = new AvailableFigureIndexesProvider();
-        this.figureContainer1 = new FigureContainer(this, 0, 0);
-        this.figureController = new FigureController(this, this.board1, this.availableFigures, this.figureContainer1);
+        this.playerFigures = new FigureContainer(this, 0, 0);
+        this.figureController = new FigureController(this, this.playerBoard, this.availableFigures, this.playerFigures);
         this.figureController.eventEmitter.on(this.figureController.fillEvent, this.simulateServer_ProcessPlayerMove, this);
 
-        this.rexAnchor.add(this.figureContainer1.gameObject, {
-            centerX: `center-${this.figureContainer1.maxWidth / 2}`,
-            centerY: `10%+${this.board1.getBounds().height * 2}`
+        this.playerFigures.setScale(0.5);
+
+        this.rexAnchor.add(this.playerFigures, {
+            centerX: `center`,
+            centerY: `10%+${this.playerBoard.y + this.playerBoard.height}`
         });
     }
 
     private simulateServer_ProcessPlayerMove(fillResult: FillResult) {
-        this.board2.fillCells(fillResult.filledCells, Figures[fillResult.figureIndex].textureKey);
-        this.board2.clearCells(fillResult.comboCells);
+        this.enemyBoard.fillCells(fillResult.filledCells, Figures[fillResult.figureIndex].textureKey);
+        this.enemyBoard.clearCells(fillResult.comboCells);
 
         const randomIndex = Phaser.Math.Between(0, Figures.length - 1);
 

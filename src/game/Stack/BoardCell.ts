@@ -21,6 +21,9 @@ export class BoardCell extends Phaser.GameObjects.Container {
         this.filled = false;
         this.highlighted = false;
 
+        this.setSize(this.getBounds().width, this.getBounds().height);
+        /*this.setInteractive();
+        this.scene.input.enableDebug(this, 0xff00ff);*/
         this.scene.add.existing(this);
     }
 
@@ -91,14 +94,14 @@ export class BoardCell extends Phaser.GameObjects.Container {
     private createBackground() {
         this.background = this.scene.add.image(0, 0, Textures.bg.key);
         this.background.setDisplaySize(CellConfig.cellSize, CellConfig.cellSize);
-        this.background.setOrigin(0);
+        this.background.setOrigin(0.5);
 
         this.add(this.background);
     }
 
     private createFillingImage() {
         this.fillingImage = this.scene.add.image(0, 0, this.emptyKey);
-        this.fillingImage.setOrigin(0);
+        this.fillingImage.setOrigin(0.5);
         this.fillingImage.setVisible(false);
 
         this.add(this.fillingImage);

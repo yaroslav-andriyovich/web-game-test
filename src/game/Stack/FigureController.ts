@@ -14,6 +14,7 @@ export class FigureController {
     private readonly availableFigures: AvailableFigureIndexesProvider;
     private readonly figureContainer: FigureContainer;
     private readonly boardFiller: BoardFiller;
+    private readonly additionalDragOffset: number = 10;
 
     private draggable!: Figure;
 
@@ -47,6 +48,7 @@ export class FigureController {
             this.draggable = gameObject;
             this.draggable.setScale(1);
             this.setFigureTopDepth(gameObject);
+            this.changeDraggablePosition(pointer);
         } else {
             this.draggable = null;
         }
@@ -56,7 +58,7 @@ export class FigureController {
         if (!this.draggable)
             return;
 
-        this.draggable.setPosition(this.draggable.x, this.draggable.y);
+        this.changeDraggablePosition(pointer);
 
         this.board.clearHighlightedCells();
         this.boardFiller.checkBoardHighlighting(this.draggable);
@@ -86,6 +88,12 @@ export class FigureController {
                 figure.setDepth(0);
             }
         }
+    }
+
+    private changeDraggablePosition(pointer: Phaser.Input.Pointer) {
+        const offset = this.draggable.height + this.additionalDragOffset;
+
+        this.draggable.setPosition(pointer.worldX, pointer.worldY - offset);
     }
 
     private destroyUsedFigure() {

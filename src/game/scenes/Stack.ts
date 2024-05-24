@@ -83,7 +83,7 @@ export class Stack extends Phaser.Scene {
         this.figureController = new FigureController(this, this.playerBoard, this.availableFigures, this.playerFigures);
         this.figureController.eventEmitter.on(this.figureController.fillEvent, this.simulateServer_ProcessPlayerMove, this);
 
-        this.playerFigures.setScale(0.5);
+        this.playerFigures.setScale(0.6);
 
         this.rexAnchor.add(this.playerFigures, {
             centerX: `center`,

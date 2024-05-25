@@ -5,17 +5,22 @@ import {FigureController} from "../Stack/FigureController";
 import {AvailableFigureIndexesProvider} from "../Stack/AvailableFigureIndexesProvider";
 import {FillResult} from "../Stack/BoardFiller";
 import {FigureContainer} from "../Stack/FigureContainer";
+import {Timer} from "../Stack/Timer";
 
 export class Stack extends Phaser.Scene {
     private readonly backgroundColor = 0x221A33;
 
     private background!: Phaser.GameObjects.Rectangle;
+
     private enemyBoard!: Board;
     private enemyFigures!: FigureContainer;
+    private enemyTimer!: Timer;
+
     private playerBoard!: Board;
     private availableFigures!: AvailableFigureIndexesProvider;
     private playerFigures!: FigureContainer;
     private figureController!: FigureController;
+    private playerTimer!: Timer;
 
     constructor() {
         super({key: SceneNames.Stack});
@@ -66,16 +71,19 @@ export class Stack extends Phaser.Scene {
             centerX: `center`,
             centerY: `6%+${this.enemyBoard.y + this.enemyBoard.height * this.enemyBoard.scale}`
         });
+
+        const timerX = this.enemyBoard.x + this.enemyBoard.width * this.enemyBoard.scale + 10;
+        const timerY = this.enemyBoard.y;
+
+        this.enemyTimer = new Timer(this, timerX, timerY, 5 * 60);
     }
 
     private createPlayer() {
         this.playerBoard = new Board(this, 0, 0);
 
-        const bounds = this.playerBoard.getBounds();
-
         this.rexAnchor.add(this.playerBoard, {
-            centerX: `center-${bounds.width / 2}`,
-            centerY: `center-${bounds.height / 2.7}`
+            centerX: `center-${this.playerBoard.width / 2}`,
+            centerY: `center-${this.playerBoard.height / 2.7}`
         });
 
         this.availableFigures = new AvailableFigureIndexesProvider();
@@ -89,6 +97,11 @@ export class Stack extends Phaser.Scene {
             centerX: `center`,
             centerY: `10%+${this.playerBoard.y + this.playerBoard.height}`
         });
+
+        const timerX = this.playerBoard.x + this.playerBoard.width + 10;
+        const timerY = this.playerBoard.y;
+
+        this.playerTimer = new Timer(this, timerX, timerY, 5 * 60);
     }
 
     private simulateServer_ProcessPlayerMove(fillResult: FillResult) {

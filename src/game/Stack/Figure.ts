@@ -14,11 +14,10 @@ export class Figure extends Phaser.GameObjects.Container {
         this.model = model;
         this.index = index;
 
+        this.createGridSizer();
         this.createParts();
 
         this.setSize(this.getBounds().width, this.getBounds().height);
-        /*this.setInteractive();
-        this.scene.input.enableDebug(this);*/
         this.scene.add.existing(this);
     }
 
@@ -36,9 +35,7 @@ export class Figure extends Phaser.GameObjects.Container {
         this.alpha = 0.4;
     }
 
-    private createParts() {
-        this.imageParts = [];
-
+    private createGridSizer() {
         const size = CellConfig.cellSize;
         const offset = CellConfig.cellOffset;
 
@@ -56,29 +53,32 @@ export class Figure extends Phaser.GameObjects.Container {
             columnProportions: 1, rowProportions: 1,
             space: { column: offset, row: offset }
         }).setOrigin(0);
+    }
 
+    private createParts() {
         this.imageParts = [];
 
-        for (let i = 0; i < this.model.parts.length; i++) {
-            this.imageParts[i] = [];
+        for (let rows = 0; rows < this.model.parts.length; rows++) {
+            this.imageParts[rows] = [];
 
-            for (let j = 0; j < this.model.parts[i].length; j++) {
-                if (this.model.parts[i][j] == 0)
+            for (let cols = 0; cols < this.model.parts[rows].length; cols++) {
+                if (this.isPartEmpty(rows, cols))
                     continue;
 
                 const part = this.scene.add.image(0, 0, this.model.textureKey);
 
-                part.setDisplaySize(size, size);
+                part.setDisplaySize(CellConfig.cellSize, CellConfig.cellSize);
 
-                /*part.setInteractive();
-                this.scene.input.enableDebug(part);*/
-
-                this.gridSizer.add(part, j, i, 'center', offset, true);
-                this.imageParts[i][j] = part;
+                this.gridSizer.add(part, cols, rows, 'center', CellConfig.cellOffset, true);
+                this.imageParts[rows][cols] = part;
             }
         }
 
         this.gridSizer.layout();
         this.add(this.gridSizer);
+    }
+
+    private isPartEmpty(row: number, col: number) : boolean {
+        return this.model.parts[row][col] == 0;
     }
 }

@@ -29,6 +29,15 @@ export class FigureController {
         this.availableFigures.eventEmitter.on(this.availableFigures.figureAddEvent, this.onFigureAdded, this);
     }
 
+    private onFigureAdded() {
+        const needCreateFigure = this.figureContainer.figuresNumber < this.availableFiguresNumber;
+
+        if (needCreateFigure) {
+            this.createFigure();
+            this.checkFigurePlacing();
+        }
+    }
+
     private createFigure() {
         const figureIndex = this.availableFigures.getNext();
         const model = Figures[figureIndex];
@@ -91,9 +100,9 @@ export class FigureController {
     }
 
     private changeDraggablePosition(pointer: Phaser.Input.Pointer) {
-        const offset = this.draggable.height + this.additionalDragOffset;
+        const offsetY = this.draggable.height + this.additionalDragOffset;
 
-        this.draggable.setPosition(pointer.worldX, pointer.worldY - offset);
+        this.draggable.setPosition(pointer.worldX, pointer.worldY - offsetY);
     }
 
     private destroyUsedFigure() {
@@ -109,28 +118,21 @@ export class FigureController {
         this.draggable = null;
     }
 
-    private onFigureAdded() {
-        if (this.figureContainer.figuresNumber < this.availableFiguresNumber) {
-            this.createFigure();
-            this.checkFigurePlacing();
-        }
-    }
-
     private checkFigurePlacing() {
-        let deactivatedCounter = 0;
+        let deactivatedFigures = 0;
 
         for (const figure of this.figureContainer.figures) {
             if (!this.boardFiller.canPlaceFigureOnBoard(figure)) {
                 figure.deactivate();
-                ++deactivatedCounter;
+                ++deactivatedFigures;
             } else {
                 figure.activate();
             }
         }
 
-        if (deactivatedCounter == this.availableFiguresNumber) {
+        if (deactivatedFigures == this.availableFiguresNumber) {
+            // Game Over
             this.board.setAlpha(0.6);
-            console.log("Game Over!");
         }
     }
 }

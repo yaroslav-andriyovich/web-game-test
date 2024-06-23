@@ -37,15 +37,11 @@ export class BoardFiller {
                     continue;
 
                 const cellWorldMatrix = cell.getWorldTransformMatrix().decomposeMatrix();
-                /*const cellX = cellWorldMatrix.translateX + cellOffset;
-                const cellY = cellWorldMatrix.translateY + cellOffset;*/
                 const cellX = cellWorldMatrix.translateX;
                 const cellY = cellWorldMatrix.translateY;
 
                 for (const part of figureParts) {
                     const figurePartWorldMatrix = part.getWorldTransformMatrix().decomposeMatrix();
-                    /*const figurePartX = figurePartWorldMatrix.translateX + cellOffset;
-                    const figurePartY = figurePartWorldMatrix.translateY + cellOffset;*/
                     const figurePartX = figurePartWorldMatrix.translateX;
                     const figurePartY = figurePartWorldMatrix.translateY;
 
@@ -133,17 +129,26 @@ export class BoardFiller {
                 const boardRow = row + i;
                 const boardCol = col + j;
 
-                if (boardRow < 0 || boardRow >= this.board.cells.length
-                    || boardCol < 0 || boardCol >= this.board.cells[0].length) {
-                    return false;
-                }
-
-                if (figure.model.parts[i][j] === 1 && this.board.cells[boardRow][boardCol].isFilled) {
+                if (this.isPositionOutOfBounds(boardRow, boardCol)
+                    || this.isFigurePartNotEmpty(figure, i, j) && this.isBoardCellFilled(boardRow, boardCol)) {
                     return false;
                 }
             }
         }
         return true;
+    }
+
+    private isPositionOutOfBounds(row: number, col: number) : boolean {
+        return row < 0 || row >= this.board.cells.length
+            || col < 0 || col >= this.board.cells[0].length;
+    }
+
+    private isFigurePartNotEmpty(figure: Figure, row: number, col: number) : boolean {
+        return figure.model.parts[row][col] === 1;
+    }
+
+    private isBoardCellFilled(row: number, col: number) : boolean {
+        return this.board.cells[row][col].isFilled;
     }
 }
 
